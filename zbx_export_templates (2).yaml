@@ -1,0 +1,184 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-10-24T03:26:52Z'
+  groups:
+    -
+      uuid: 36bff6c29af64692839d077febfc7079
+      name: 'Templates/Network devices'
+    -
+      uuid: 437994976f454c02b9f817dc5e977e2c
+      name: Templates/POLYUS
+    -
+      uuid: 35d37788679240358409a26e5547efeb
+      name: 'Test templates'
+  templates:
+    -
+      uuid: 6f8f7dcb3ca141bebb8bda281f2411f4
+      template: 'POLYUS Module ICMP Ping'
+      name: 'POLYUS Module ICMP Ping'
+      description: |
+        Template Module  ICMP Ping
+        
+        Template tooling version used: 0.43
+      groups:
+        -
+          name: 'Templates/Network devices'
+        -
+          name: Templates/POLYUS
+        -
+          name: 'Test templates'
+      items:
+        -
+          uuid: 54108b032a0b4e48954742908922e101
+          name: 'ICMP loss'
+          type: SIMPLE
+          key: 'icmppingloss[,,,,{$ICMP_PACKET_TIMEOUT}]'
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          tags:
+            -
+              tag: component
+              value: health
+            -
+              tag: component
+              value: network
+          triggers:
+            -
+              uuid: 83f968d00eed4c5e84585e0fefced03c
+              expression: '{$ICMP.CONTROL.LOSS}=1 and min(/POLYUS Module ICMP Ping/icmppingloss[,,,,{$ICMP_PACKET_TIMEOUT}],5m)>{$ICMP_LOSS_WARN} and min(/POLYUS Module ICMP Ping/icmppingloss[,,,,{$ICMP_PACKET_TIMEOUT}],5m)<100'
+              name: 'High ICMP ping loss'
+              event_name: 'High ICMP ping loss (over {$ICMP_LOSS_WARN}%)'
+              opdata: 'Loss: {ITEM.LASTVALUE1}'
+              priority: WARNING
+              manual_close: 'YES'
+              dependencies:
+                -
+                  name: 'Unavailable by ICMP ping'
+                  expression: '{$ICMP.CONTROL.PING}=1 and max(/POLYUS Module ICMP Ping/icmpping[,,,,{$ICMP_PACKET_TIMEOUT}],{$ICMP_UNAVAILABLE_PERIOD})=0'
+                  recovery_expression: 'min(/POLYUS Module ICMP Ping/icmpping[,,,,{$ICMP_PACKET_TIMEOUT}],#2)=1'
+              tags:
+                -
+                  tag: scope
+                  value: availability
+                -
+                  tag: scope
+                  value: performance
+        -
+          uuid: 29404b34e3a8419ea6859db3d551d796
+          name: 'ICMP response time'
+          type: SIMPLE
+          key: 'icmppingsec[,,,,{$ICMP_PACKET_TIMEOUT}]'
+          history: 1w
+          value_type: FLOAT
+          units: s
+          tags:
+            -
+              tag: component
+              value: health
+            -
+              tag: component
+              value: network
+          triggers:
+            -
+              uuid: 2673c1a8f38048fb82a63e6f12cf165b
+              expression: '{$ICMP.CONTROL.RESPTIME}=1 and min(/POLYUS Module ICMP Ping/icmppingsec[,,,,{$ICMP_PACKET_TIMEOUT}],5m)>{$ICMP_RESPONSE_TIME_WARN}'
+              name: 'High ICMP ping response time'
+              event_name: 'High ICMP ping response time (over {$ICMP_RESPONSE_TIME_WARN}s)'
+              opdata: 'Value: {ITEM.LASTVALUE1}'
+              priority: WARNING
+              manual_close: 'YES'
+              dependencies:
+                -
+                  name: 'High ICMP ping loss'
+                  expression: '{$ICMP.CONTROL.LOSS}=1 and min(/POLYUS Module ICMP Ping/icmppingloss[,,,,{$ICMP_PACKET_TIMEOUT}],5m)>{$ICMP_LOSS_WARN} and min(/POLYUS Module ICMP Ping/icmppingloss[,,,,{$ICMP_PACKET_TIMEOUT}],5m)<100'
+                -
+                  name: 'Unavailable by ICMP ping'
+                  expression: '{$ICMP.CONTROL.PING}=1 and max(/POLYUS Module ICMP Ping/icmpping[,,,,{$ICMP_PACKET_TIMEOUT}],{$ICMP_UNAVAILABLE_PERIOD})=0'
+                  recovery_expression: 'min(/POLYUS Module ICMP Ping/icmpping[,,,,{$ICMP_PACKET_TIMEOUT}],#2)=1'
+              tags:
+                -
+                  tag: scope
+                  value: availability
+                -
+                  tag: scope
+                  value: performance
+        -
+          uuid: 788c105cd77d4d39be00354390724210
+          name: 'ICMP ping'
+          type: SIMPLE
+          key: 'icmpping[,,,,{$ICMP_PACKET_TIMEOUT}]'
+          history: 1w
+          valuemap:
+            name: 'Service state'
+          tags:
+            -
+              tag: Application
+              value: Status
+            -
+              tag: component
+              value: health
+            -
+              tag: component
+              value: network
+          triggers:
+            -
+              uuid: f57ee1fd1f3a4ff2ba89948ce0c1169a
+              expression: '{$ICMP.CONTROL.PING}=1 and max(/POLYUS Module ICMP Ping/icmpping[,,,,{$ICMP_PACKET_TIMEOUT}],{$ICMP_UNAVAILABLE_PERIOD})=0'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'min(/POLYUS Module ICMP Ping/icmpping[,,,,{$ICMP_PACKET_TIMEOUT}],#2)=1'
+              name: 'Unavailable by ICMP ping'
+              event_name: 'Unavailable by ICMP ping last {$ICMP_UNAVAILABLE_PERIOD}'
+              priority: HIGH
+              description: 'Last {$ICMP_UNAVAILABLE_PERIOD} attempts returned timeout.  Please check device connectivity.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: availability
+      tags:
+        -
+          tag: class
+          value: network
+        -
+          tag: target
+          value: icmp
+      macros:
+        -
+          macro: '{$ICMP.CONTROL.LOSS}'
+          value: '0'
+          description: 'Триггер по ICMP ping loss. 0 - Триггер отключен (default), 1 - Триггер включен'
+        -
+          macro: '{$ICMP.CONTROL.PING}'
+          value: '1'
+          description: 'Триггер доступности по ICMP. 0 - Триггер отключен, 1 - Триггер включен (default)'
+        -
+          macro: '{$ICMP.CONTROL.RESPTIME}'
+          value: '0'
+          description: 'Триггер по ICMP ping response time. 0 - Триггер отключен (default), 1 - Триггер включен'
+        -
+          macro: '{$ICMP_LOSS_WARN}'
+          value: '20'
+        -
+          macro: '{$ICMP_PACKET_TIMEOUT}'
+          value: '1000'
+          description: 'Timeout in ms for each ICMP ping packet'
+        -
+          macro: '{$ICMP_RESPONSE_TIME_WARN}'
+          value: '0.15'
+          description: 'Порог в секундах'
+        -
+          macro: '{$ICMP_UNAVAILABLE_PERIOD}'
+          value: 3m
+          description: 'Устанавливает период недоступности, при котором сработает триггер, по умолчанию 3m - последние три минуты = 0. Для примера: 1h - за последний час, 10m - за последние 10 минут'
+      valuemaps:
+        -
+          uuid: 54003b5d163a4b55b8823190957244ee
+          name: 'Service state'
+          mappings:
+            -
+              value: '0'
+              newvalue: Down
+            -
+              value: '1'
+              newvalue: Up
