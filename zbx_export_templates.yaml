@@ -1,0 +1,2458 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-10-24T02:51:20Z'
+  groups:
+    -
+      uuid: 846977d1dfed4968bc5f8bdb363285bc
+      name: 'Templates/Operating systems'
+  templates:
+    -
+      uuid: 4531290141684043b7a28213d2f1684b
+      template: 'POLYUS Template OS Windows by Zabbix agent'
+      name: 'POLYUS Template OS Windows by Zabbix agent'
+      description: |
+        Official Windows template. Requires agent of Zabbix 4.4 and newer.
+        
+        
+        You can discuss this template or leave feedback on our forum https://www.zabbix.com/forum/zabbix-suggestions-and-feedback/387224-discussion-thread-for-official-zabbix-template-for-windows
+        
+        Template tooling version used: 0.41
+      templates:
+        -
+          name: 'POLYUS Module ICMP Ping'
+      groups:
+        -
+          name: 'Templates/Operating systems'
+      items:
+        -
+          uuid: 3f7bb92e36e7473689c78bdd74b48597
+          name: 'Host name of Zabbix agent running'
+          key: agent.hostname
+          delay: 1h
+          history: 7d
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1d
+          tags:
+            -
+              tag: component
+              value: system
+        -
+          uuid: 36c7998b61334475953f3da8bffa8882
+          name: 'Zabbix agent ping'
+          type: ZABBIX_ACTIVE
+          key: agent.ping
+          history: 7d
+          description: 'The agent always returns 1 for this item. It could be used in combination with nodata() for availability check.'
+          valuemap:
+            name: 'Zabbix agent ping status'
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 2m
+          tags:
+            -
+              tag: component
+              value: system
+          triggers:
+            -
+              uuid: 15a8db24b9534b4ca56419b17784ec83
+              expression: 'nodata(/POLYUS Template OS Windows by Zabbix agent/agent.ping,2h)=1'
+              name: 'NoData active checks last 2h'
+              priority: AVERAGE
+              description: 'Проверь соответствие Host name в Zabbix и конфиге агента.'
+              manual_close: 'YES'
+              dependencies:
+                -
+                  name: 'Zabbix agent is not available (for {$AGENT.TIMEOUT})'
+                  expression: |
+                    max(/POLYUS Template OS Windows by Zabbix agent/zabbix[host,agent,available],{$AGENT.TIMEOUT})=0 and
+                    last(/POLYUS Template OS Windows by Zabbix agent/zabbix[host,,maintenance])=0
+              tags:
+                -
+                  tag: scope
+                  value: availability
+                -
+                  tag: scope
+                  value: nodata
+        -
+          uuid: 6e8fddcc627343b88c82ec23b0724630
+          name: 'Version of Zabbix agent running'
+          key: agent.version
+          delay: 1h
+          history: 7d
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1d
+          tags:
+            -
+              tag: component
+              value: system
+        -
+          uuid: 93a1a8d8ed6d459c98657436c75b7ada
+          name: 'Log: System, EventID: 129'
+          type: ZABBIX_ACTIVE
+          key: 'eventlog[System,,,,129,,skip]'
+          delay: 30s
+          history: 30d
+          trends: '0'
+          status: DISABLED
+          value_type: LOG
+        -
+          uuid: 95c940b2205f4c589105b1c53e8ff4e5
+          name: 'Log: System, EventID: 153'
+          type: ZABBIX_ACTIVE
+          key: 'eventlog[System,,,,153,,skip]'
+          delay: 30s
+          history: 30d
+          trends: '0'
+          status: DISABLED
+          value_type: LOG
+        -
+          uuid: 37ac508feaae4050b3fda7817ab7a3ac
+          name: 'Windows server reboot planned (Event 6006)'
+          type: ZABBIX_ACTIVE
+          key: 'eventlog[System,,,,^(6006)$,,skip]'
+          delay: 1s
+          trends: '0'
+          value_type: LOG
+          tags:
+            -
+              tag: component
+              value: events
+          triggers:
+            -
+              uuid: c83c51380ae14fd68ef656dfa2de31ef
+              expression: '{$EVENT.REBOOT.PLANNED.CONTROL}=1 and count(/POLYUS Template OS Windows by Zabbix agent/eventlog[System,,,,^(6006)$,,skip],1m)>0'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'nodata(/POLYUS Template OS Windows by Zabbix agent/eventlog[System,,,,^(6006)$,,skip],30m)=1'
+              name: 'Сервер был планово перезагружен (Event 6006)'
+              priority: INFO
+              type: MULTIPLE
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: notice
+        -
+          uuid: 12ff83087dc64fc2b0b31689fa85ccd7
+          name: 'Windows server reboot unexpected of Events 6008, 41'
+          type: ZABBIX_ACTIVE
+          key: 'eventlog[System,,,^(EventLog|Microsoft-Windows-Kernel-Power)$,^(41|6008)$,,skip]'
+          delay: 1s
+          trends: '0'
+          value_type: LOG
+          tags:
+            -
+              tag: component
+              value: events
+          triggers:
+            -
+              uuid: 87bc69b0647f43ad8b6b2ea6460b0584
+              expression: '{$EVENT.REBOOT.CRIT.CONTROL}=1 and {TRIGGER.VALUE}=0 and length(last(/POLYUS Template OS Windows by Zabbix agent/eventlog[System,,,^(EventLog|Microsoft-Windows-Kernel-Power)$,^(41|6008)$,,skip]))>0'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: '{TRIGGER.VALUE}=1 and nodata(/POLYUS Template OS Windows by Zabbix agent/eventlog[System,,,^(EventLog|Microsoft-Windows-Kernel-Power)$,^(41|6008)$,,skip],1h)=1'
+              name: '[Rule] Зафиксирована критичная перезагрузка сервера'
+              priority: HIGH
+              description: 'Windows server reboot unexpected of Events 6008, 41'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: availability
+                -
+                  tag: scope
+                  value: notice
+        -
+          uuid: a179e57aa021440bb899161145b6c957
+          name: 'Cache bytes'
+          key: 'perf_counter_en["\Memory\Cache Bytes"]'
+          history: 7d
+          units: B
+          description: |
+            Cache Bytes is the sum of the Memory\\System Cache Resident Bytes, Memory\\System Driver Resident Bytes, 
+            Memory\\System Code Resident Bytes, and Memory\\Pool Paged Resident Bytes counters. This counter displays 
+            the last observed value only; it is not an average.
+          tags:
+            -
+              tag: component
+              value: memory
+        -
+          uuid: d39a454740b14c3080e8a93f7cdd4dbc
+          name: 'Free system page table entries'
+          key: 'perf_counter_en["\Memory\Free System Page Table Entries"]'
+          history: 7d
+          description: |
+            This indicates the number of page table entries not currently in use by the system. If the number is less 
+            than 5,000, there may well be a memory leak or you running out of memory.
+          tags:
+            -
+              tag: component
+              value: memory
+          triggers:
+            -
+              uuid: c8fc2ce655f443c8932f3e3d6311f48b
+              expression: 'max(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\Memory\Free System Page Table Entries"],30m)<{$MEM.PAGE_TABLE_CRIT.MIN}'
+              name: 'Number of free system page table entries is too low (less {$MEM.PAGE_TABLE_CRIT.MIN} for 30m)'
+              opdata: 'Last: {ITEM.LASTVALUE1}'
+              status: DISABLED
+              priority: WARNING
+              description: 'The Memory Free System Page Table Entries is less than {$MEM.PAGE_TABLE_CRIT.MIN} for 30 minutes. If the number is less than 5,000, there may well be a memory leak.'
+              dependencies:
+                -
+                  name: 'High memory utilization (>{$MEM.UTIL.MAX}% for {$MEM.UTIL.MAX.TIME})'
+                  expression: 'min(/POLYUS Template OS Windows by Zabbix agent/vm.memory.util,{$MEM.UTIL.MAX.TIME})>{$MEM.UTIL.MAX}'
+              tags:
+                -
+                  tag: scope
+                  value: performance
+        -
+          uuid: cf858b47baac48bc9e8195db52f58eee
+          name: 'Memory page faults per second'
+          key: 'perf_counter_en["\Memory\Page Faults/sec"]'
+          history: 7d
+          value_type: FLOAT
+          description: |
+            Page Faults/sec is the average number of pages faulted per second. It is measured in number of pages 
+            faulted per second because only one page is faulted in each fault operation, hence this is also equal 
+            to the number of page fault operations. This counter includes both hard faults (those that require 
+            disk access) and soft faults (where the faulted page is found elsewhere in physical memory.) Most 
+            processors can handle large numbers of soft faults without significant consequence. However, hard faults, 
+            which require disk access, can cause significant delays.
+          tags:
+            -
+              tag: component
+              value: memory
+        -
+          uuid: 2cc69a5784c6419ebd7b60efbad85490
+          name: 'Memory pages per second'
+          key: 'perf_counter_en["\Memory\Pages/sec"]'
+          history: 7d
+          value_type: FLOAT
+          description: |
+            This measures the rate at which pages are read from or written to disk to resolve hard page faults. 
+            If the value is greater than 1,000, as a result of excessive paging, there may be a memory leak.
+          tags:
+            -
+              tag: component
+              value: memory
+          triggers:
+            -
+              uuid: ff86902b2219468593777c92f733f292
+              expression: 'min(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\Memory\Pages/sec"],30m)>{$MEM.PAGE_SEC.CRIT.MAX}'
+              name: 'The Memory Pages/sec is too high (over {$MEM.PAGE_SEC.CRIT.MAX} for 30m)'
+              opdata: 'Last: {ITEM.LASTVALUE1}'
+              status: DISABLED
+              priority: WARNING
+              description: 'The Memory Pages/sec in the last 30 minutes exceeds {$MEM.PAGE_SEC.CRIT.MAX}. If the value is greater than 1,000, as a result of excessive paging, there may be a memory leak.'
+              dependencies:
+                -
+                  name: 'High memory utilization (>{$MEM.UTIL.MAX}% for {$MEM.UTIL.MAX.TIME})'
+                  expression: 'min(/POLYUS Template OS Windows by Zabbix agent/vm.memory.util,{$MEM.UTIL.MAX.TIME})>{$MEM.UTIL.MAX}'
+              tags:
+                -
+                  tag: scope
+                  value: performance
+        -
+          uuid: be01c08ce19140a98ccc1e550382f876
+          name: 'Memory pool non-paged'
+          key: 'perf_counter_en["\Memory\Pool Nonpaged Bytes"]'
+          history: 7d
+          units: B
+          description: |
+            This measures the size, in bytes, of the non-paged pool. This is an area of system memory for objects 
+            that cannot be written to disk but instead must remain in physical memory as long as they are allocated. 
+            There is a possible memory leak if the value is greater than 175MB (or 100MB with the /3GB switch). 
+            A typical Event ID 2019 is recorded in the system event log.
+          tags:
+            -
+              tag: component
+              value: memory
+        -
+          uuid: afc4ac2a271b4128873de1b0ac6c993d
+          name: 'Used swap space in %'
+          key: 'perf_counter_en["\Paging file(_Total)\% Usage"]'
+          delay: 5m
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The used space of swap volume/file in percent.'
+          tags:
+            -
+              tag: component
+              value: memory
+            -
+              tag: component
+              value: storage
+        -
+          uuid: baeea14b84af4587bb732d52c7689c21
+          name: 'CPU DPC time'
+          key: 'perf_counter_en["\Processor Information(_total)\% DPC Time"]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: |
+            Processor DPC time is the time that a single processor spent receiving and servicing deferred procedure 
+            calls (DPCs). DPCs are interrupts that run at a lower priority than standard interrupts. % DPC Time is a 
+            component of % Privileged Time because DPCs are executed in privileged mode. If a high % DPC Time is 
+            sustained, there may be a processor bottleneck or an application or hardware related issue that can 
+            significantly diminish overall system performance.
+          tags:
+            -
+              tag: component
+              value: cpu
+        -
+          uuid: b5903fa486d34d0b9765f1409a28bfa9
+          name: 'CPU interrupt time'
+          key: 'perf_counter_en["\Processor Information(_total)\% Interrupt Time"]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: |
+            The Processor Information\% Interrupt Time is the time the processor spends receiving and servicing 
+            hardware interrupts during sample intervals. This value is an indirect indicator of the activity of 
+            devices that generate interrupts, such as the system clock, the mouse, disk drivers, data communication 
+            lines, network interface cards and other peripheral devices. This is an easy way to identify a potential 
+            hardware failure. This should never be higher than 20%.
+          tags:
+            -
+              tag: component
+              value: cpu
+          triggers:
+            -
+              uuid: f1b72963e68d4a3591a645b27d8c6254
+              expression: 'min(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\Processor Information(_total)\% Interrupt Time"],30m)>{$CPU.INTERRUPT.CRIT.MAX}'
+              name: 'CPU interrupt time is too high (over {$CPU.INTERRUPT.CRIT.MAX}% for 30m)'
+              opdata: 'Last: {ITEM.LASTVALUE1}'
+              priority: WARNING
+              description: |
+                "The CPU Interrupt Time in the last 30 minutes exceeds {$CPU.INTERRUPT.CRIT.MAX}%."
+                The Processor Information\% Interrupt Time is the time the processor spends receiving and servicing 
+                hardware interrupts during sample intervals. This value is an indirect indicator of the activity of 
+                devices that generate interrupts, such as the system clock, the mouse, disk drivers, data communication 
+                lines, network interface cards and other peripheral devices. This is an easy way to identify a potential 
+                hardware failure. This should never be higher than 20%.
+              dependencies:
+                -
+                  name: 'High CPU utilization (over {$CPU.UTIL.CRIT}% for 30m)'
+                  expression: 'min(/POLYUS Template OS Windows by Zabbix agent/system.cpu.util,30m)>{$CPU.UTIL.CRIT}'
+              tags:
+                -
+                  tag: scope
+                  value: performance
+        -
+          uuid: f18b75e4f2464b9abf277e9e8804531b
+          name: 'CPU privileged time'
+          key: 'perf_counter_en["\Processor Information(_total)\% Privileged Time"]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: |
+            The Processor Information\% Privileged Time counter shows the percent of time that the processor is spent 
+            executing in Kernel (or Privileged) mode. Privileged mode includes services interrupts inside Interrupt 
+            Service Routines (ISRs), executing Deferred Procedure Calls (DPCs), Device Driver calls and other kernel-mode 
+            functions of the Windows® Operating System.
+          tags:
+            -
+              tag: component
+              value: cpu
+          triggers:
+            -
+              uuid: 4616f5f6ca3d46ef8ca79f601f825340
+              expression: 'min(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\Processor Information(_total)\% Privileged Time"],30m)>{$CPU.PRIV.CRIT.MAX}'
+              name: 'CPU privileged time is too high (over {$CPU.PRIV.CRIT.MAX}% for 30m)'
+              opdata: 'Last: {ITEM.LASTVALUE1}'
+              status: DISABLED
+              priority: WARNING
+              description: 'The CPU privileged time in the last 30 minutes exceeds {$CPU.PRIV.CRIT.MAX}%.'
+              manual_close: 'YES'
+              dependencies:
+                -
+                  name: 'CPU interrupt time is too high (over {$CPU.INTERRUPT.CRIT.MAX}% for 30m)'
+                  expression: 'min(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\Processor Information(_total)\% Interrupt Time"],30m)>{$CPU.INTERRUPT.CRIT.MAX}'
+                -
+                  name: 'High CPU utilization (over {$CPU.UTIL.CRIT}% for 30m)'
+                  expression: 'min(/POLYUS Template OS Windows by Zabbix agent/system.cpu.util,30m)>{$CPU.UTIL.CRIT}'
+              tags:
+                -
+                  tag: scope
+                  value: performance
+        -
+          uuid: 028605e737c64843b0dec3dfa9260844
+          name: 'CPU Total Processor Time'
+          key: 'perf_counter_en["\Processor Information(_total)\% Processor Time",60]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: '“\Processor Information(_Total)\% Processor Time” shows the percentage of the time that the processor takes to execute a non-idle thread during a sample interval.'
+          tags:
+            -
+              tag: component
+              value: cpu
+        -
+          uuid: a4f5fcf14ee0411d8d7d0a0e33b9281d
+          name: 'CPU Total Processor Utility'
+          key: 'perf_counter_en["\Processor Information(_Total)\% Processor Utility",60]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: '“\Processor Information(_Total)\% Processor Utility” is the amount of work a processor is completing, as a percentage of the amount of work the processor could complete if it were running at its nominal performance and never idle.'
+          preprocessing:
+            -
+              type: CHECK_NOT_SUPPORTED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: component
+              value: cpu
+        -
+          uuid: 7eed83b8fccf4153bd28e261ee72639e
+          name: 'CPU user time'
+          key: 'perf_counter_en["\Processor Information(_total)\% User Time"]'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: |
+            The Processor Information\% User Time counter shows the percent of time that the processor(s) is spent executing 
+            in User mode.
+          tags:
+            -
+              tag: component
+              value: cpu
+        -
+          uuid: b9bb02ca5ca14297a8826a78ed4d727c
+          name: 'Context switches per second'
+          key: 'perf_counter_en["\System\Context Switches/sec"]'
+          history: 7d
+          value_type: FLOAT
+          description: |
+            Context Switches/sec is the combined rate at which all processors on the computer are switched from one thread to another.
+            Context switches occur when a running thread voluntarily relinquishes the processor, is preempted by a higher priority ready thread, or switches between user-mode and privileged (kernel) mode to use an Executive or subsystem service.
+            It is the sum of Thread\\Context Switches/sec for all threads running on all processors in the computer and is measured in numbers of switches.
+            There are context switch counters on the System and Thread objects. This counter displays the difference between the values observed in the last two samples, divided by the duration of the sample interval.
+          tags:
+            -
+              tag: component
+              value: cpu
+        -
+          uuid: 81bd7d5f76f14e72aeec4778328ddfda
+          name: 'CPU queue length'
+          key: 'perf_counter_en["\System\Processor Queue Length"]'
+          history: 7d
+          value_type: FLOAT
+          description: |
+            The Processor Queue Length shows the number of threads that are observed as delayed in the processor Ready Queue 
+            and are waiting to be executed.
+          tags:
+            -
+              tag: component
+              value: cpu
+        -
+          uuid: c11c8f6341f946ceb0ddc154393c5a67
+          name: 'Number of threads'
+          key: 'perf_counter_en["\System\Threads"]'
+          history: 7d
+          description: 'The number of threads used by all running processes.'
+          tags:
+            -
+              tag: component
+              value: os
+        -
+          uuid: 4761cda6f98549e5a958ebf547811d93
+          name: 'Number of processes'
+          key: 'proc.num[]'
+          history: 7d
+          description: 'The number of processes.'
+          tags:
+            -
+              tag: component
+              value: os
+        -
+          uuid: 5a19fa02422947deb6e7c2efa2b30940
+          name: 'CPU utilization'
+          key: system.cpu.util
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'CPU utilization in %'
+          tags:
+            -
+              tag: component
+              value: cpu
+          triggers:
+            -
+              uuid: 2b6bc79632144d44972f1954ac5ea829
+              expression: 'min(/POLYUS Template OS Windows by Zabbix agent/system.cpu.util,30m)>{$CPU.UTIL.CRIT}'
+              name: 'High CPU utilization (over {$CPU.UTIL.CRIT}% for 30m)'
+              opdata: 'Current utilization: {ITEM.LASTVALUE1}'
+              priority: WARNING
+              description: 'CPU utilization is too high. The system might be slow to respond.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: performance
+            -
+              uuid: ae4cfeaa0c9547ef9267a9734a784ec2
+              expression: 'min(/POLYUS Template OS Windows by Zabbix agent/system.cpu.util,{$CPU.UTIL.MAX.TIME.SIEM})>{$CPU.UTIL.CRIT.SIEM}'
+              name: 'High CPU utilization for siem (over {$CPU.UTIL.CRIT.SIEM}% for {$CPU.UTIL.MAX.TIME.SIEM})'
+              opdata: 'Current utilization: {ITEM.LASTVALUE1}'
+              description: 'CPU utilization is too high. The system might be slow to respond.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: performance
+                -
+                  tag: siem
+                  value: 'true'
+        -
+          uuid: e666f09d0db84a689c137418a4e296fa
+          name: 'System name'
+          key: system.hostname
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: 'System host name.'
+          inventory_link: NAME
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1d
+          tags:
+            -
+              tag: component
+              value: system
+          triggers:
+            -
+              uuid: fcbea82c1be94f299e16ac1fbff305de
+              expression: '(last(/POLYUS Template OS Windows by Zabbix agent/system.hostname,#1)<>last(/POLYUS Template OS Windows by Zabbix agent/system.hostname,#2))=1 and length(last(/POLYUS Template OS Windows by Zabbix agent/system.hostname))>0'
+              name: 'System name has changed (new name: {ITEM.VALUE})'
+              priority: INFO
+              description: 'System name has changed. Ack to close.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: notice
+        -
+          uuid: 56086f88234544d2b648976f11168b1c
+          name: 'System local time'
+          key: system.localtime
+          history: 7d
+          units: unixtime
+          description: 'System local time of the host.'
+          tags:
+            -
+              tag: component
+              value: system
+          triggers:
+            -
+              uuid: 85a486757555495da70620e3741524bb
+              expression: 'fuzzytime(/POLYUS Template OS Windows by Zabbix agent/system.localtime,{$SYSTEM.FUZZYTIME.MAX})=0'
+              name: 'System time is out of sync (diff with Zabbix server > {$SYSTEM.FUZZYTIME.MAX}s)'
+              status: DISABLED
+              priority: WARNING
+              description: 'The host system time is different from the Zabbix server time.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: notice
+        -
+          uuid: 2f26264369434099a4a446cd79048af3
+          name: 'Operating system architecture'
+          key: system.sw.arch
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: 'Operating system architecture of the host.'
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1d
+          tags:
+            -
+              tag: component
+              value: os
+        -
+          uuid: df45cfa77f6748cca48e901893fd7ed5
+          name: 'Free swap space'
+          type: CALCULATED
+          key: system.swap.free
+          delay: 5m
+          history: 7d
+          units: B
+          params: 'last(//system.swap.size[,total]) - last(//system.swap.size[,total]) / 100 * last(//perf_counter_en["\Paging file(_Total)\% Usage"])'
+          description: 'The free space of swap volume/file in bytes.'
+          tags:
+            -
+              tag: component
+              value: memory
+            -
+              tag: component
+              value: storage
+        -
+          uuid: 6a634a5a180445a2a9f36cab51f11556
+          name: 'Free swap space in %'
+          type: DEPENDENT
+          key: system.swap.pfree
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          description: 'The free space of swap volume/file in percent.'
+          preprocessing:
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return (100 - value)'
+          master_item:
+            key: 'perf_counter_en["\Paging file(_Total)\% Usage"]'
+          tags:
+            -
+              tag: component
+              value: memory
+            -
+              tag: component
+              value: storage
+        -
+          uuid: 06e7b250cbf4422cb77bcd3acc3d2c55
+          name: 'Total swap space'
+          key: 'system.swap.size[,total]'
+          delay: 5m
+          history: 7d
+          units: B
+          description: 'The total space of swap volume/file in bytes.'
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 30m
+          tags:
+            -
+              tag: component
+              value: memory
+            -
+              tag: component
+              value: storage
+        -
+          uuid: 69029cbdefeb4e8a848616dcf2de941e
+          name: 'System description'
+          key: system.uname
+          delay: 15m
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: 'System description of the host.'
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1d
+          tags:
+            -
+              tag: component
+              value: system
+        -
+          uuid: a453a829653e4f0f855f69bc327d4bd6
+          name: Uptime
+          key: system.uptime
+          delay: 5m
+          history: 2w
+          trends: '0'
+          units: uptime
+          description: 'System uptime in ''N days, hh:mm:ss'' format.'
+          tags:
+            -
+              tag: component
+              value: system
+          triggers:
+            -
+              uuid: 56559e28d7694a07810f89c5b1599299
+              expression: 'last(/POLYUS Template OS Windows by Zabbix agent/system.uptime)<10m'
+              name: 'Host has been restarted (uptime < 10m)'
+              status: DISABLED
+              priority: WARNING
+              description: 'The device uptime is less than 10 minutes.'
+              manual_close: 'YES'
+        -
+          uuid: 44eeb7ae3bd54e2991623bc156396a8b
+          name: 'temp. wsfc.ps1 file exists'
+          key: 'vfs.file.exists[C:\ZABBIX_GDMIA\wsfc.ps1]'
+          status: DISABLED
+        -
+          uuid: 7b50b182ffdd47969198fb811a01ef90
+          name: 'Total memory'
+          key: 'vm.memory.size[total]'
+          history: 7d
+          units: B
+          description: 'Total memory in Bytes'
+          tags:
+            -
+              tag: component
+              value: memory
+        -
+          uuid: af627591b0e041bbbfbc29a23301ab36
+          name: 'Used memory'
+          key: 'vm.memory.size[used]'
+          history: 7d
+          units: B
+          description: 'Used memory in Bytes'
+          tags:
+            -
+              tag: component
+              value: memory
+        -
+          uuid: 2108a414f6f940cab200e71158224061
+          name: 'Memory utilization'
+          type: CALCULATED
+          key: vm.memory.util
+          history: 7d
+          value_type: FLOAT
+          units: '%'
+          params: 'last(//vm.memory.size[used]) / last(//vm.memory.size[total]) * 100'
+          description: 'Memory utilization in %'
+          tags:
+            -
+              tag: component
+              value: memory
+          triggers:
+            -
+              uuid: d6f92baff3a14646a27883dbe6e60362
+              expression: 'min(/POLYUS Template OS Windows by Zabbix agent/vm.memory.util,{$MEM.UTIL.MAX.TIME})>{$MEM.UTIL.MAX}'
+              name: 'High memory utilization (>{$MEM.UTIL.MAX}% for {$MEM.UTIL.MAX.TIME})'
+              opdata: 'Last: {ITEM.LASTVALUE1}'
+              priority: AVERAGE
+              description: 'The system is running out of free memory.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: performance
+            -
+              uuid: 60ac58ee7c8145258dba0ec12dcede9e
+              expression: 'min(/POLYUS Template OS Windows by Zabbix agent/vm.memory.util,{$MEM.UTIL.MAX.TIME.SIEM})>{$MEM.UTIL.MAX.SIEM}'
+              name: 'High memory utilization for siem (>{$MEM.UTIL.MAX.SIEM}% for {$MEM.UTIL.MAX.TIME.SIEM})'
+              opdata: 'Last: {ITEM.LASTVALUE1}'
+              description: 'The system is running out of free memory.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: performance
+                -
+                  tag: siem
+                  value: 'true'
+        -
+          uuid: 317d5d0bbacd4cf6bedf81c5cdccc87c
+          name: 'Network interfaces WMI get'
+          key: 'wmi.getall[root\cimv2,"select Name,Description,NetConnectionID,Speed,AdapterTypeId,NetConnectionStatus,GUID from win32_networkadapter where PhysicalAdapter=True and NetConnectionStatus>0"]'
+          history: '0'
+          trends: '0'
+          value_type: TEXT
+          description: 'Raw data of win32_networkadapter.'
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1h
+          tags:
+            -
+              tag: component
+              value: raw
+        -
+          uuid: badaebb490854aaf8e4e46c713bb2e9a
+          name: 'Number of cores'
+          key: 'wmi.get[root/cimv2,"Select NumberOfLogicalProcessors from Win32_ComputerSystem"]'
+          history: 7d
+          description: 'The number of logical processors available on the computer.'
+          tags:
+            -
+              tag: component
+              value: cpu
+        -
+          uuid: c3e018ab237348739b4b8ffc6691bc82
+          name: 'Zabbix host maintenance'
+          type: INTERNAL
+          key: 'zabbix[host,,maintenance]'
+          history: 7d
+          description: 'Monitoring host maintenance status'
+          valuemap:
+            name: zabbix.host.maintenance
+          tags:
+            -
+              tag: component
+              value: system
+        -
+          uuid: bd98a99e0ea0438e887cb16e39f9b14f
+          name: 'Zabbix agent availability'
+          type: INTERNAL
+          key: 'zabbix[host,agent,available]'
+          history: 7d
+          description: 'Monitoring agent availability status'
+          valuemap:
+            name: zabbix.host.available
+          tags:
+            -
+              tag: component
+              value: system
+      discovery_rules:
+        -
+          uuid: e8d21212ff854b39ac9d8665088e4f43
+          name: 'Network interfaces discovery'
+          type: DEPENDENT
+          key: net.if.discovery
+          delay: '0'
+          filter:
+            evaltype: AND
+            conditions:
+              -
+                macro: '{#IFNAME}'
+                value: '{$NET.IF.IFNAME.MATCHES}'
+                formulaid: E
+              -
+                macro: '{#IFNAME}'
+                value: '{$NET.IF.IFNAME.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: F
+              -
+                macro: '{#IFDESCR}'
+                value: '{$NET.IF.IFDESCR.MATCHES}'
+                formulaid: C
+              -
+                macro: '{#IFDESCR}'
+                value: '{$NET.IF.IFDESCR.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: D
+              -
+                macro: '{#IFALIAS}'
+                value: '{$NET.IF.IFALIAS.MATCHES}'
+                formulaid: A
+              -
+                macro: '{#IFALIAS}'
+                value: '{$NET.IF.IFALIAS.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: B
+          lifetime: 7d
+          description: 'Discovery of installed network interfaces.'
+          item_prototypes:
+            -
+              uuid: 7c3bbf3cace447c8bbc8ab8acdde052d
+              name: 'Interface {#IFNAME}({#IFALIAS}): Inbound packets discarded'
+              key: 'net.if.in["{#IFGUID}",dropped]'
+              delay: 3m
+              history: 7d
+              description: 'The number of incoming packets dropped on the network interface.'
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              tags:
+                -
+                  tag: component
+                  value: network
+                -
+                  tag: description
+                  value: '{#IFALIAS}'
+                -
+                  tag: interface
+                  value: '{#IFNAME}'
+            -
+              uuid: f9025015d8a6498db7aceec7a1628cc9
+              name: 'Interface {#IFNAME}({#IFALIAS}): Inbound packets with errors'
+              key: 'net.if.in["{#IFGUID}",errors]'
+              delay: 3m
+              history: 7d
+              description: 'The number of incoming packets with errors on the network interface.'
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              tags:
+                -
+                  tag: component
+                  value: network
+                -
+                  tag: description
+                  value: '{#IFALIAS}'
+                -
+                  tag: interface
+                  value: '{#IFNAME}'
+            -
+              uuid: 0f333457e16c4b57a0b1e204dc095002
+              name: 'Interface {#IFNAME}({#IFALIAS}): Bits received'
+              key: 'net.if.in["{#IFGUID}"]'
+              delay: 3m
+              history: 7d
+              units: bps
+              description: 'Incoming traffic on the network interface.'
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                -
+                  tag: component
+                  value: network
+                -
+                  tag: description
+                  value: '{#IFALIAS}'
+                -
+                  tag: interface
+                  value: '{#IFNAME}'
+            -
+              uuid: dc6e5eb62c20400bae068732deae3389
+              name: 'Interface {#IFNAME}({#IFALIAS}): Outbound packets discarded'
+              key: 'net.if.out["{#IFGUID}",dropped]'
+              delay: 3m
+              history: 7d
+              description: 'The number of outgoing packets dropped on the network interface.'
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              tags:
+                -
+                  tag: component
+                  value: network
+                -
+                  tag: description
+                  value: '{#IFALIAS}'
+                -
+                  tag: interface
+                  value: '{#IFNAME}'
+            -
+              uuid: 60ccef7f390e4906b2c177818887f9f6
+              name: 'Interface {#IFNAME}({#IFALIAS}): Outbound packets with errors'
+              key: 'net.if.out["{#IFGUID}",errors]'
+              delay: 3m
+              history: 7d
+              description: 'The number of outgoing packets with errors on the network interface.'
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              tags:
+                -
+                  tag: component
+                  value: network
+                -
+                  tag: description
+                  value: '{#IFALIAS}'
+                -
+                  tag: interface
+                  value: '{#IFNAME}'
+            -
+              uuid: aa99a6a322b14d54a5db18b6d1346702
+              name: 'Interface {#IFNAME}({#IFALIAS}): Bits sent'
+              key: 'net.if.out["{#IFGUID}"]'
+              delay: 3m
+              history: 7d
+              units: bps
+              description: 'Outgoing traffic on the network interface.'
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                -
+                  tag: component
+                  value: network
+                -
+                  tag: description
+                  value: '{#IFALIAS}'
+                -
+                  tag: interface
+                  value: '{#IFNAME}'
+            -
+              uuid: 0f650d0d131945ecad6a3bb356a5935a
+              name: 'Interface {#IFNAME}({#IFALIAS}): Speed'
+              type: DEPENDENT
+              key: 'net.if.speed["{#IFGUID}"]'
+              delay: '0'
+              history: 7d
+              trends: 0d
+              units: bps
+              description: 'Estimated bandwidth of the network interface if any.'
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$[?(@.GUID == "{#IFGUID}")].Speed.first()'
+                  error_handler: CUSTOM_VALUE
+                  error_handler_params: '0'
+                -
+                  type: JAVASCRIPT
+                  parameters:
+                    - |
+                      return (value=='9223372036854775807' ? 0 : value)
+                      
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - 1h
+              master_item:
+                key: 'wmi.getall[root\cimv2,"select Name,Description,NetConnectionID,Speed,AdapterTypeId,NetConnectionStatus,GUID from win32_networkadapter where PhysicalAdapter=True and NetConnectionStatus>0"]'
+              tags:
+                -
+                  tag: component
+                  value: network
+                -
+                  tag: description
+                  value: '{#IFALIAS}'
+                -
+                  tag: interface
+                  value: '{#IFNAME}'
+            -
+              uuid: b73ba4ac5b0c4a9497b40c42ef13ee54
+              name: 'Interface {#IFNAME}({#IFALIAS}): Operational status'
+              type: DEPENDENT
+              key: 'net.if.status["{#IFGUID}"]'
+              delay: '0'
+              history: 7d
+              trends: '0'
+              description: 'The operational status of the network interface.'
+              valuemap:
+                name: 'Win32_NetworkAdapter::NetConnectionStatus'
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$[?(@.GUID == "{#IFGUID}")].NetConnectionStatus.first()'
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - 1d
+              master_item:
+                key: 'wmi.getall[root\cimv2,"select Name,Description,NetConnectionID,Speed,AdapterTypeId,NetConnectionStatus,GUID from win32_networkadapter where PhysicalAdapter=True and NetConnectionStatus>0"]'
+              tags:
+                -
+                  tag: component
+                  value: network
+                -
+                  tag: description
+                  value: '{#IFALIAS}'
+                -
+                  tag: interface
+                  value: '{#IFNAME}'
+              trigger_prototypes:
+                -
+                  uuid: edc706c5b0684cbeb943423f242a9d45
+                  expression: '{$NET.IF.CONTROL:"{#IFNAME}"}=1 and (last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"])<>2 and (last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"],#1)<>last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"],#2))=1)'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"])=2 or {$NET.IF.CONTROL:"{#IFNAME}"}=0'
+                  name: 'Interface {#IFNAME}({#IFALIAS}): Link down'
+                  opdata: 'Current state: {ITEM.LASTVALUE1}'
+                  priority: AVERAGE
+                  description: |
+                    This trigger expression works as follows:
+                    1. Can be triggered if operations status is down.
+                    2. {$NET.IF.CONTROL:\"{#IFNAME}\"}=1 - user can redefine Context macro to value - 0. That marks this interface as not important.
+                        No new trigger will be fired if this interface is down.
+                    3. {TEMPLATE_NAME:METRIC.diff()}=1) - trigger fires only if operational status is different from Connected(2).
+                    
+                    WARNING: if closed manually - won't fire again on next poll, because of .diff.
+                  manual_close: 'YES'
+                  tags:
+                    -
+                      tag: scope
+                      value: availability
+            -
+              uuid: ee7f6fa2e3d641beb853a1561e31958f
+              name: 'Interface {#IFNAME}({#IFALIAS}): Interface type'
+              type: DEPENDENT
+              key: 'net.if.type["{#IFGUID}"]'
+              delay: '0'
+              history: 7d
+              trends: '0'
+              description: 'The type of the network interface.'
+              valuemap:
+                name: 'Win32_NetworkAdapter::AdapterTypeId'
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$[?(@.GUID == "{#IFGUID}")].AdapterTypeId.first()'
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - 1d
+              master_item:
+                key: 'wmi.getall[root\cimv2,"select Name,Description,NetConnectionID,Speed,AdapterTypeId,NetConnectionStatus,GUID from win32_networkadapter where PhysicalAdapter=True and NetConnectionStatus>0"]'
+              tags:
+                -
+                  tag: component
+                  value: network
+                -
+                  tag: description
+                  value: '{#IFALIAS}'
+                -
+                  tag: interface
+                  value: '{#IFNAME}'
+          trigger_prototypes:
+            -
+              uuid: f8fd094de0c2472abb2543411fb45e1f
+              expression: |
+                change(/POLYUS Template OS Windows by Zabbix agent/net.if.speed["{#IFGUID}"])<0 and
+                last(/POLYUS Template OS Windows by Zabbix agent/net.if.speed["{#IFGUID}"])>0 and
+                last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"])=2
+              name: 'Interface {#IFNAME}({#IFALIAS}): Ethernet has changed to lower speed than it was before'
+              opdata: 'Current reported speed: {ITEM.LASTVALUE1}'
+              status: DISABLED
+              priority: INFO
+              description: 'This Ethernet connection has transitioned down from its known maximum speed. This might be a sign of autonegotiation issues. Ack to close.'
+              manual_close: 'YES'
+              dependencies:
+                -
+                  name: 'Interface {#IFNAME}({#IFALIAS}): Link down'
+                  expression: '{$NET.IF.CONTROL:"{#IFNAME}"}=1 and (last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"])<>2 and (last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"],#1)<>last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"],#2))=1)'
+                  recovery_expression: 'last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"])=2 or {$NET.IF.CONTROL:"{#IFNAME}"}=0'
+              tags:
+                -
+                  tag: scope
+                  value: capacity
+            -
+              uuid: f6cd2dcb92cc4e3b9510fee23a196e7c
+              expression: |
+                (avg(/POLYUS Template OS Windows by Zabbix agent/net.if.in["{#IFGUID}"],15m)>({$NET.IF.UTIL.MAX:"{#IFNAME}"}/100)*last(/POLYUS Template OS Windows by Zabbix agent/net.if.speed["{#IFGUID}"]) or
+                avg(/POLYUS Template OS Windows by Zabbix agent/net.if.out["{#IFGUID}"],15m)>({$NET.IF.UTIL.MAX:"{#IFNAME}"}/100)*last(/POLYUS Template OS Windows by Zabbix agent/net.if.speed["{#IFGUID}"])) and
+                last(/POLYUS Template OS Windows by Zabbix agent/net.if.speed["{#IFGUID}"])>0
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: |
+                avg(/POLYUS Template OS Windows by Zabbix agent/net.if.in["{#IFGUID}"],15m)<(({$NET.IF.UTIL.MAX:"{#IFNAME}"}-3)/100)*last(/POLYUS Template OS Windows by Zabbix agent/net.if.speed["{#IFGUID}"]) and
+                avg(/POLYUS Template OS Windows by Zabbix agent/net.if.out["{#IFGUID}"],15m)<(({$NET.IF.UTIL.MAX:"{#IFNAME}"}-3)/100)*last(/POLYUS Template OS Windows by Zabbix agent/net.if.speed["{#IFGUID}"])
+              name: 'Interface {#IFNAME}({#IFALIAS}): High bandwidth usage (>{$NET.IF.UTIL.MAX:"{#IFNAME}"}%)'
+              opdata: 'In: {ITEM.LASTVALUE1}, out: {ITEM.LASTVALUE3}, speed: {ITEM.LASTVALUE2}'
+              discover: NO_DISCOVER
+              priority: WARNING
+              description: 'The network interface utilization is close to its estimated maximum bandwidth.'
+              manual_close: 'YES'
+              dependencies:
+                -
+                  name: 'Interface {#IFNAME}({#IFALIAS}): Link down'
+                  expression: '{$NET.IF.CONTROL:"{#IFNAME}"}=1 and (last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"])<>2 and (last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"],#1)<>last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"],#2))=1)'
+                  recovery_expression: 'last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"])=2 or {$NET.IF.CONTROL:"{#IFNAME}"}=0'
+              tags:
+                -
+                  tag: scope
+                  value: performance
+            -
+              uuid: 9b775f470b5a4291a8b425aedea0f941
+              expression: |
+                min(/POLYUS Template OS Windows by Zabbix agent/net.if.in["{#IFGUID}",errors],5m)>{$NET.IF.ERRORS.WARN:"{#IFNAME}"}
+                or min(/POLYUS Template OS Windows by Zabbix agent/net.if.out["{#IFGUID}",errors],5m)>{$NET.IF.ERRORS.WARN:"{#IFNAME}"}
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: |
+                max(/POLYUS Template OS Windows by Zabbix agent/net.if.in["{#IFGUID}",errors],5m)<{$NET.IF.ERRORS.WARN:"{#IFNAME}"}*0.8
+                and max(/POLYUS Template OS Windows by Zabbix agent/net.if.out["{#IFGUID}",errors],5m)<{$NET.IF.ERRORS.WARN:"{#IFNAME}"}*0.8
+              name: 'Interface {#IFNAME}({#IFALIAS}): High error rate (>{$NET.IF.ERRORS.WARN:"{#IFNAME}"} for 5m)'
+              opdata: 'errors in: {ITEM.LASTVALUE1}, errors out: {ITEM.LASTVALUE2}'
+              priority: WARNING
+              description: 'Recovers when below 80% of {$NET.IF.ERRORS.WARN:"{#IFNAME}"} threshold'
+              manual_close: 'YES'
+              dependencies:
+                -
+                  name: 'Interface {#IFNAME}({#IFALIAS}): Link down'
+                  expression: '{$NET.IF.CONTROL:"{#IFNAME}"}=1 and (last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"])<>2 and (last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"],#1)<>last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"],#2))=1)'
+                  recovery_expression: 'last(/POLYUS Template OS Windows by Zabbix agent/net.if.status["{#IFGUID}"])=2 or {$NET.IF.CONTROL:"{#IFNAME}"}=0'
+              tags:
+                -
+                  tag: scope
+                  value: availability
+          graph_prototypes:
+            -
+              uuid: 10d5f8ffb438453c8b6e568449b842fa
+              name: 'Interface {#IFNAME}({#IFALIAS}): Network traffic'
+              graph_items:
+                -
+                  drawtype: GRADIENT_LINE
+                  color: 1A7C11
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'net.if.in["{#IFGUID}"]'
+                -
+                  sortorder: '1'
+                  drawtype: BOLD_LINE
+                  color: 2774A4
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'net.if.out["{#IFGUID}"]'
+                -
+                  sortorder: '2'
+                  color: F63100
+                  yaxisside: RIGHT
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'net.if.out["{#IFGUID}",errors]'
+                -
+                  sortorder: '3'
+                  color: A54F10
+                  yaxisside: RIGHT
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'net.if.in["{#IFGUID}",errors]'
+                -
+                  sortorder: '4'
+                  color: FC6EA3
+                  yaxisside: RIGHT
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'net.if.out["{#IFGUID}",dropped]'
+                -
+                  sortorder: '5'
+                  color: 6C59DC
+                  yaxisside: RIGHT
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'net.if.in["{#IFGUID}",dropped]'
+          master_item:
+            key: 'wmi.getall[root\cimv2,"select Name,Description,NetConnectionID,Speed,AdapterTypeId,NetConnectionStatus,GUID from win32_networkadapter where PhysicalAdapter=True and NetConnectionStatus>0"]'
+          preprocessing:
+            -
+              type: JAVASCRIPT
+              parameters:
+                - |
+                  output = JSON.parse(value).map(function(net){
+                      return {
+                          "{#IFNAME}": net.Name,
+                          "{#IFDESCR}": net.Description,
+                          "{#IFALIAS}": net.NetConnectionID,
+                          "{#IFGUID}": net.GUID
+                      }})
+                  return JSON.stringify({"data": output})
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1h
+        -
+          uuid: a4bcbfdf575246daa50818a062bebe7b
+          name: 'Physical disks discovery'
+          key: 'perf_instance_en.discovery[PhysicalDisk]'
+          delay: 1h
+          filter:
+            evaltype: AND
+            conditions:
+              -
+                macro: '{#DEVNAME}'
+                value: '{$VFS.DEV.DEVNAME.MATCHES}'
+                formulaid: A
+              -
+                macro: '{#DEVNAME}'
+                value: '{$VFS.DEV.DEVNAME.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: B
+          lifetime: 7d
+          description: 'Discovery of installed physical disks.'
+          item_prototypes:
+            -
+              uuid: 1b277472746e4098a4baf1453ada43a7
+              name: '{#DEVNAME}: Disk utilization by idle time'
+              key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\% Idle Time",60]'
+              history: 7d
+              value_type: FLOAT
+              units: '%'
+              description: 'This item is the percentage of elapsed time that the selected disk drive was busy servicing read or writes requests based on idle time'
+              preprocessing:
+                -
+                  type: JAVASCRIPT
+                  parameters:
+                    - 'return 100 - value'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: disk
+                  value: '{#DEVNAME}'
+              trigger_prototypes:
+                -
+                  uuid: 06dbd898f86c490798d7c70dbaf9fdac
+                  expression: 'min(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\PhysicalDisk({#DEVNAME})\% Idle Time",60],30m)>{$VFS.DEV.UTIL.MAX.WARN}'
+                  name: '{#DEVNAME}: Disk is overloaded (util > {$VFS.DEV.UTIL.MAX.WARN}% for 30m)'
+                  opdata: 'Last: {ITEM.LASTVALUE1}'
+                  status: DISABLED
+                  discover: NO_DISCOVER
+                  description: 'The disk appears to be under heavy load'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: '{#DEVNAME}: Disk read request responses are too high (read > {$VFS.DEV.READ.AWAIT.WARN:"{#DEVNAME}"}s for 30m'
+                      expression: 'min(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\PhysicalDisk({#DEVNAME})\Avg. Disk sec/Read",60],30m) > {$VFS.DEV.READ.AWAIT.WARN:"{#DEVNAME}"}'
+                    -
+                      name: '{#DEVNAME}: Disk write request responses are too high (write > {$VFS.DEV.WRITE.AWAIT.WARN:"{#DEVNAME}"}s for 30m)'
+                      expression: 'min(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\PhysicalDisk({#DEVNAME})\Avg. Disk sec/Write",60],30m) > {$VFS.DEV.WRITE.AWAIT.WARN:"{#DEVNAME}"}'
+                  tags:
+                    -
+                      tag: scope
+                      value: performance
+            -
+              uuid: ad08aaf88d7f4ac4a799959c5f2c81c8
+              name: '{#DEVNAME}: Average disk read queue length'
+              key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Avg. Disk Read Queue Length",60]'
+              history: 7d
+              value_type: FLOAT
+              description: 'Average disk read queue, the number of requests outstanding on the disk at the time the performance data is collected.'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: disk
+                  value: '{#DEVNAME}'
+            -
+              uuid: 08a53a54725346cbbfeacab3fd2684b9
+              name: '{#DEVNAME}: Disk read request avg waiting time'
+              key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Avg. Disk sec/Read",60]'
+              history: 7d
+              value_type: FLOAT
+              units: s
+              description: 'The average time for read requests issued to the device to be served. This includes the time spent by the requests in queue and the time spent servicing them.'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: disk
+                  value: '{#DEVNAME}'
+              trigger_prototypes:
+                -
+                  uuid: 604ca6c9f4ad487a8793cc7bcd661875
+                  expression: 'min(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\PhysicalDisk({#DEVNAME})\Avg. Disk sec/Read",60],30m) > {$VFS.DEV.READ.AWAIT.WARN:"{#DEVNAME}"}'
+                  name: '{#DEVNAME}: Disk read request responses are too high (read > {$VFS.DEV.READ.AWAIT.WARN:"{#DEVNAME}"}s for 30m'
+                  opdata: 'Last: {ITEM.LASTVALUE1}'
+                  status: DISABLED
+                  discover: NO_DISCOVER
+                  description: 'This trigger might indicate disk {#DEVNAME} saturation.'
+                  manual_close: 'YES'
+                  tags:
+                    -
+                      tag: scope
+                      value: performance
+            -
+              uuid: b69652f40fa544b3bf0de207eab508eb
+              name: '{#DEVNAME}: Disk write request avg waiting time'
+              key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Avg. Disk sec/Write",60]'
+              history: 7d
+              value_type: FLOAT
+              units: s
+              description: 'The average time for write requests issued to the device to be served. This includes the time spent by the requests in queue and the time spent servicing them.'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: disk
+                  value: '{#DEVNAME}'
+              trigger_prototypes:
+                -
+                  uuid: 5fbbdefe40714262aca34bc53c1fd59d
+                  expression: 'min(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\PhysicalDisk({#DEVNAME})\Avg. Disk sec/Write",60],30m) > {$VFS.DEV.WRITE.AWAIT.WARN:"{#DEVNAME}"}'
+                  name: '{#DEVNAME}: Disk write request responses are too high (write > {$VFS.DEV.WRITE.AWAIT.WARN:"{#DEVNAME}"}s for 30m)'
+                  opdata: 'Last: {ITEM.LASTVALUE1}'
+                  status: DISABLED
+                  discover: NO_DISCOVER
+                  description: 'This trigger might indicate disk {#DEVNAME} saturation.'
+                  manual_close: 'YES'
+                  tags:
+                    -
+                      tag: scope
+                      value: performance
+            -
+              uuid: 7e67bfd5cf4a401bb8a2628ce35ee852
+              name: '{#DEVNAME}: Average disk write queue length'
+              key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Avg. Disk Write Queue Length",60]'
+              history: 7d
+              value_type: FLOAT
+              description: 'Average disk write queue, the number of requests outstanding on the disk at the time the performance data is collected.'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: disk
+                  value: '{#DEVNAME}'
+            -
+              uuid: a0681ba541a844759c2cf25f41dac570
+              name: '{#DEVNAME}: Disk average queue size (avgqu-sz)'
+              key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Current Disk Queue Length",60]'
+              history: 7d
+              value_type: FLOAT
+              description: 'Current average disk queue, the number of requests outstanding on the disk at the time the performance data is collected.'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: disk
+                  value: '{#DEVNAME}'
+            -
+              uuid: 58d1f99164fc46aebe1369ea4ead8a52
+              name: '{#DEVNAME}: Disk read rate'
+              key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Disk Reads/sec",60]'
+              history: 7d
+              value_type: FLOAT
+              units: '!r/s'
+              description: 'Rate of read operations on the disk.'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: disk
+                  value: '{#DEVNAME}'
+            -
+              uuid: 64132ab1d7034634a1de3512fc0501f0
+              name: '{#DEVNAME}: Disk write rate'
+              key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Disk Writes/sec",60]'
+              history: 7d
+              value_type: FLOAT
+              units: '!w/s'
+              description: 'Rate of write operations on the disk.'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: disk
+                  value: '{#DEVNAME}'
+          graph_prototypes:
+            -
+              uuid: 52159c0b31544147826a07624bb4d5c7
+              name: '{#DEVNAME}: Disk average queue length'
+              graph_items:
+                -
+                  color: 1A7C11
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Avg. Disk Read Queue Length",60]'
+                -
+                  sortorder: '1'
+                  color: 2774A4
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Avg. Disk Write Queue Length",60]'
+            -
+              uuid: 5809d4c0cab54b95bb68b83fe3fcb5b7
+              name: '{#DEVNAME}: Disk average waiting time'
+              graph_items:
+                -
+                  color: 1A7C11
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Avg. Disk sec/Read",60]'
+                -
+                  sortorder: '1'
+                  drawtype: GRADIENT_LINE
+                  color: 2774A4
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Avg. Disk sec/Write",60]'
+            -
+              uuid: fe31e0b40896438bb58c07422057c4d3
+              name: '{#DEVNAME}: Disk read/write rates'
+              graph_items:
+                -
+                  color: 1A7C11
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Disk Reads/sec",60]'
+                -
+                  sortorder: '1'
+                  drawtype: GRADIENT_LINE
+                  color: 2774A4
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Disk Writes/sec",60]'
+            -
+              uuid: ea040f6124b4464d9cd0b10386860bad
+              name: '{#DEVNAME}: Disk utilization and queue'
+              graph_items:
+                -
+                  color: 1A7C11
+                  yaxisside: RIGHT
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\Current Disk Queue Length",60]'
+                -
+                  sortorder: '1'
+                  drawtype: GRADIENT_LINE
+                  color: 2774A4
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'perf_counter_en["\PhysicalDisk({#DEVNAME})\% Idle Time",60]'
+          preprocessing:
+            -
+              type: STR_REPLACE
+              parameters:
+                - '{#INSTANCE}'
+                - '{#DEVNAME}'
+        -
+          uuid: 5ea1930229af4858a64ee19704c8bb7a
+          name: 'Windows services discovery'
+          key: service.discovery
+          delay: 1h
+          filter:
+            evaltype: AND
+            conditions:
+              -
+                macro: '{#SERVICE.NAME}'
+                value: '{$SERVICE.NAME.MATCHES}'
+                formulaid: A
+              -
+                macro: '{#SERVICE.NAME}'
+                value: '{$SERVICE.NAME.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: B
+              -
+                macro: '{#SERVICE.STARTUPNAME}'
+                value: '{$SERVICE.STARTUPNAME.MATCHES}'
+                formulaid: C
+              -
+                macro: '{#SERVICE.STARTUPNAME}'
+                value: '{$SERVICE.STARTUPNAME.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: D
+          lifetime: 7d
+          description: 'Discovery of Windows services of different types as defined in template''s macros.'
+          item_prototypes:
+            -
+              uuid: d378cd5e00154826b82b295e34f7b01d
+              name: 'State of service "{#SERVICE.NAME}" ({#SERVICE.DISPLAYNAME})'
+              key: 'service.info["{#SERVICE.NAME}",state]'
+              history: 7d
+              valuemap:
+                name: 'Windows service state'
+              tags:
+                -
+                  tag: component
+                  value: system
+                -
+                  tag: name
+                  value: '{#SERVICE.DISPLAYNAME}'
+                -
+                  tag: service
+                  value: '{#SERVICE.NAME}'
+              trigger_prototypes:
+                -
+                  uuid: 3c7100fd71f74174bdfaf95b630915ef
+                  expression: '{$SERVICE.CONTROL:"{#SERVICE.NAME}"}=1 and min(/POLYUS Template OS Windows by Zabbix agent/service.info["{#SERVICE.NAME}",state],{$SERVICE.MIN.PROBLEM.INTERVAL:"{#SERVICE.NAME}"})<>0 and last(/POLYUS Template OS Windows by Zabbix agent/service.info["{#SERVICE.NAME}",state])<>255'
+                  name: '"{#SERVICE.NAME}" ({#SERVICE.DISPLAYNAME}) is not running (startup type {#SERVICE.STARTUPNAME})'
+                  event_name: '"{#SERVICE.NAME}" ({#SERVICE.DISPLAYNAME}) is not running (startup type {#SERVICE.STARTUPNAME}) last {$SERVICE.MIN.PROBLEM.INTERVAL:"{#SERVICE.NAME}"}'
+                  priority: AVERAGE
+                  description: 'The service has a state other than "Running" for the last three times.'
+                  manual_close: 'YES'
+                  tags:
+                    -
+                      tag: scope
+                      value: notice
+        -
+          uuid: 2a0c44fa004749b985283df4b4742024
+          name: 'Mounted filesystem discovery'
+          key: vfs.fs.discovery
+          delay: 1h
+          filter:
+            evaltype: AND
+            conditions:
+              -
+                macro: '{#FSTYPE}'
+                value: '{$VFS.FS.FSTYPE.MATCHES}'
+                formulaid: E
+              -
+                macro: '{#FSTYPE}'
+                value: '{$VFS.FS.FSTYPE.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: F
+              -
+                macro: '{#FSNAME}'
+                value: '{$VFS.FS.FSNAME.MATCHES}'
+                formulaid: C
+              -
+                macro: '{#FSNAME}'
+                value: '{$VFS.FS.FSNAME.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: D
+              -
+                macro: '{#FSDRIVETYPE}'
+                value: '{$VFS.FS.FSDRIVETYPE.MATCHES}'
+                formulaid: A
+              -
+                macro: '{#FSDRIVETYPE}'
+                value: '{$VFS.FS.FSDRIVETYPE.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: B
+          lifetime: 7d
+          description: 'Discovery of file systems of different types.'
+          item_prototypes:
+            -
+              uuid: 3d9a505f97bd40e6b0c268a1c9bd0e68
+              name: '{#FSNAME}: Free space'
+              key: 'vfs.fs.size[{#FSNAME},free]'
+              history: 7d
+              units: B
+              description: 'Free storage in Bytes'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: filesystem
+                  value: '{#FSNAME}'
+              trigger_prototypes:
+                -
+                  uuid: e0a37f4079a648838cd7a62c3389e214
+                  expression: '(max(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},free],5m))<{$VFS.FS.FREE.MIN.CRIT:"{#FSNAME}"}'
+                  name: '{#FSNAME}: Logical Disk Free Space is critically low'
+                  event_name: '{#FSNAME}: Logical Disk Free Space is critically low less than {$VFS.FS.FREE.MIN.CRIT:"{#FSNAME}"}B'
+                  opdata: 'Free space: {ITEM.LASTVALUE1}'
+                  priority: AVERAGE
+                  description: |
+                    The disk {#FSNAME} on computer {HOST.NAME} is running out of disk space. 
+                    The values that exceeded the threshold are {ITEM.LASTVALUE1} free space.
+                  tags:
+                    -
+                      tag: scope
+                      value: capacity
+                -
+                  uuid: 3e18301554874d6e85dbb57617fd0e14
+                  expression: 'nodata(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},free],{$VFS.FS.NODATA.PERIOD})=1'
+                  name: '{#FSNAME}: Logical Disk Free Space NoData'
+                  event_name: '{#FSNAME}: Logical Disk Free Space NoData (last {$VFS.FS.NODATA.PERIOD})'
+                  opdata: '!'
+                  priority: WARNING
+                  description: 'Нет данных по месту на диске'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Zabbix agent is not available (for {$AGENT.TIMEOUT})'
+                      expression: |
+                        max(/POLYUS Template OS Windows by Zabbix agent/zabbix[host,agent,available],{$AGENT.TIMEOUT})=0 and
+                        last(/POLYUS Template OS Windows by Zabbix agent/zabbix[host,,maintenance])=0
+                  tags:
+                    -
+                      tag: scope
+                      value: availability
+                    -
+                      tag: scope
+                      value: nodata
+            -
+              uuid: b6eeaef34b534d4c9a28ea7d947b72ff
+              name: '{#FSNAME}: Free space in %'
+              key: 'vfs.fs.size[{#FSNAME},pfree]'
+              history: 7d
+              value_type: FLOAT
+              units: '%'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: filesystem
+                  value: '{#FSNAME}'
+              trigger_prototypes:
+                -
+                  uuid: 78c257c5e70249c5bd26e59e9dcdfe0c
+                  expression: '(last(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},pfree],#2) - last(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},pfree],#1))>{$VFS.FS.CHANGES.PERCENT}'
+                  name: '{#FSNAME}: Logical Disk Free Space changes quickly'
+                  opdata: 'Free space: {ITEM.LASTVALUE1}'
+                  status: DISABLED
+                  priority: AVERAGE
+                  description: 'Место на диске сократилось на {$VFS.FS.CHANGES.PERCENT} за минуту.'
+                  manual_close: 'YES'
+                  tags:
+                    -
+                      tag: scope
+                      value: capacity
+            -
+              uuid: bdc2e1009d214e6a97b238b31e5317eb
+              name: '{#FSNAME}: Space utilization'
+              key: 'vfs.fs.size[{#FSNAME},pused]'
+              history: 7d
+              value_type: FLOAT
+              units: '%'
+              description: 'Space utilization in % for {#FSNAME}'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: filesystem
+                  value: '{#FSNAME}'
+            -
+              uuid: 1f2d1058c3454d649dff3ac5474a75f8
+              name: '{#FSNAME}: Total space'
+              key: 'vfs.fs.size[{#FSNAME},total]'
+              history: 7d
+              units: B
+              description: 'Total space in Bytes'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: filesystem
+                  value: '{#FSNAME}'
+            -
+              uuid: 02fced0c77094c5faa40dcc2fd1de63f
+              name: '{#FSNAME}: Used space'
+              key: 'vfs.fs.size[{#FSNAME},used]'
+              history: 7d
+              units: B
+              description: 'Used storage in Bytes'
+              tags:
+                -
+                  tag: component
+                  value: storage
+                -
+                  tag: filesystem
+                  value: '{#FSNAME}'
+          trigger_prototypes:
+            -
+              uuid: a388bda4603b4977b592b5c5c111227c
+              expression: |
+                last(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},pused])>{$VFS.FS.PUSED.MAX.CRIT:"{#FSNAME}"} and
+                ((last(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},total])-last(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},used]))<5G or timeleft(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},pused],1h,100)<1d)
+              name: '{#FSNAME}: Disk space is critically low (used > {$VFS.FS.PUSED.MAX.CRIT:"{#FSNAME}"}%)'
+              opdata: 'Space used: {ITEM.LASTVALUE3} of {ITEM.LASTVALUE2} ({ITEM.LASTVALUE1})'
+              status: DISABLED
+              discover: NO_DISCOVER
+              priority: AVERAGE
+              description: |
+                Two conditions should match: First, space utilization should be above {$VFS.FS.PUSED.MAX.CRIT:"{#FSNAME}"}.
+                 Second condition should be one of the following:
+                 - The disk free space is less than 5G.
+                 - The disk will be full in less than 24 hours.
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: capacity
+            -
+              uuid: b6790c9a6fc54db9821a431a3d7a3aa3
+              expression: |
+                last(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},pused])>{$VFS.FS.PUSED.MAX.WARN:"{#FSNAME}"} and
+                ((last(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},total])-last(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},used]))<10G or timeleft(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},pused],1h,100)<1d)
+              name: '{#FSNAME}: Disk space is low (used > {$VFS.FS.PUSED.MAX.WARN:"{#FSNAME}"}%)'
+              opdata: 'Space used: {ITEM.LASTVALUE3} of {ITEM.LASTVALUE2} ({ITEM.LASTVALUE1})'
+              status: DISABLED
+              discover: NO_DISCOVER
+              priority: WARNING
+              description: |
+                Two conditions should match: First, space utilization should be above {$VFS.FS.PUSED.MAX.WARN:"{#FSNAME}"}.
+                 Second condition should be one of the following:
+                 - The disk free space is less than 10G.
+                 - The disk will be full in less than 24 hours.
+              manual_close: 'YES'
+              dependencies:
+                -
+                  name: '{#FSNAME}: Disk space is critically low (used > {$VFS.FS.PUSED.MAX.CRIT:"{#FSNAME}"}%)'
+                  expression: |
+                    last(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},pused])>{$VFS.FS.PUSED.MAX.CRIT:"{#FSNAME}"} and
+                    ((last(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},total])-last(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},used]))<5G or timeleft(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},pused],1h,100)<1d)
+              tags:
+                -
+                  tag: scope
+                  value: capacity
+            -
+              uuid: 5bf65c8e956340f495d556cb5693a408
+              expression: 'max(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},pfree],15m)<(100-{$VFS.FS.PUSED.MAX.WARN:"{#FSNAME}"}) and max(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},free],15m)<{$VFS.FS.FREE.MIN.WARN:"{#FSNAME}"} and last(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},total])>=0'
+              name: '{#FSNAME}: Logical Disk Free Space is low'
+              event_name: '{#FSNAME}: Logical Disk Free Space is low less than {?100-{$VFS.FS.PUSED.MAX.WARN:"{#FSNAME}"}}% and {$VFS.FS.FREE.MIN.WARN:"{#FSNAME}"}B'
+              opdata: 'Space free: {ITEM.LASTVALUE2} of {ITEM.LASTVALUE3} ({ITEM.LASTVALUE1})'
+              priority: WARNING
+              description: |
+                The disk on {#FSNAME} computer {HOST.NAME} is running out of disk space. 
+                The values that exceeded the threshold are {ITEM.LASTVALUE1} free space and {ITEM.LASTVALUE2} free of {ITEM.LASTVALUE3}.
+              dependencies:
+                -
+                  name: '{#FSNAME}: Logical Disk Free Space is critically low'
+                  expression: '(max(/POLYUS Template OS Windows by Zabbix agent/vfs.fs.size[{#FSNAME},free],5m))<{$VFS.FS.FREE.MIN.CRIT:"{#FSNAME}"}'
+              tags:
+                -
+                  tag: scope
+                  value: capacity
+          graph_prototypes:
+            -
+              uuid: 8965ca9c36694931b6593ba53284cc52
+              name: '{#FSNAME}: Disk space usage'
+              width: '600'
+              height: '340'
+              yaxismax: '0'
+              show_work_period: 'NO'
+              show_triggers: 'NO'
+              type: PIE
+              show_3d: 'YES'
+              graph_items:
+                -
+                  color: '969696'
+                  calc_fnc: LAST
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'vfs.fs.size[{#FSNAME},total]'
+                -
+                  sortorder: '1'
+                  color: C80000
+                  calc_fnc: LAST
+                  item:
+                    host: 'POLYUS Template OS Windows by Zabbix agent'
+                    key: 'vfs.fs.size[{#FSNAME},used]'
+      tags:
+        -
+          tag: class
+          value: os
+        -
+          tag: target
+          value: windows
+      macros:
+        -
+          macro: '{$AGENT.TIMEOUT}'
+          value: 15m
+          description: 'Timeout after which agent is considered unavailable. Works only for agents reachable from Zabbix server/proxy (passive mode).'
+        -
+          macro: '{$CPU.INTERRUPT.CRIT.MAX}'
+          value: '50'
+          description: 'The critical threshold of the % Interrupt Time counter.'
+        -
+          macro: '{$CPU.PRIV.CRIT.MAX}'
+          value: '30'
+          description: 'The threshold of the % Privileged Time counter.'
+        -
+          macro: '{$CPU.QUEUE.CRIT.MAX}'
+          value: '3'
+          description: 'The threshold of the Processor Queue Length counter.'
+        -
+          macro: '{$CPU.UTIL.CRIT}'
+          value: '95'
+          description: 'The critical threshold of the CPU utilization in %.'
+        -
+          macro: '{$CPU.UTIL.CRIT.SIEM}'
+          value: '90'
+          description: 'Порог для триггера для отправки в SIEM'
+        -
+          macro: '{$CPU.UTIL.MAX.TIME.SIEM}'
+          value: 5m
+          description: 'Порог для триггера для отправки в SIEM'
+        -
+          macro: '{$EVENT.REBOOT.CRIT.CONTROL}'
+          value: '1'
+          description: 'Контролируем критичную перезагрузку.'
+        -
+          macro: '{$EVENT.REBOOT.PLANNED.CONTROL}'
+          value: '0'
+          description: 'Disabled by default. Контролировать плановую перезагрузку.'
+        -
+          macro: '{$MEM.PAGE_SEC.CRIT.MAX}'
+          value: '1000'
+          description: 'The warning threshold of the Memory Pages/sec counter.'
+        -
+          macro: '{$MEM.PAGE_TABLE_CRIT.MIN}'
+          value: '5000'
+          description: 'The warning threshold of the Free System Page Table Entries counter.'
+        -
+          macro: '{$MEM.SWAP.PFREE.MIN.WARN}'
+          value: '10'
+          description: '% The warning threshold of the minimum free swap.'
+        -
+          macro: '{$MEM.UTIL.MAX}'
+          value: '90'
+          description: '% The warning threshold of the Memory util item.'
+        -
+          macro: '{$MEM.UTIL.MAX.SIEM}'
+          value: '90'
+          description: 'Порог для триггера для отправки в SIEM'
+        -
+          macro: '{$MEM.UTIL.MAX.TIME}'
+          value: 30m
+        -
+          macro: '{$MEM.UTIL.MAX.TIME.SIEM}'
+          value: 5m
+          description: 'Порог для триггера для отправки в SIEM'
+        -
+          macro: '{$NET.IF.CONTROL}'
+          value: '0'
+          description: 'Disabled by default'
+        -
+          macro: '{$NET.IF.ERRORS.WARN}'
+          value: '10'
+        -
+          macro: '{$NET.IF.IFALIAS.MATCHES}'
+          value: '.*'
+          description: 'This macro is used in Network interface discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$NET.IF.IFALIAS.NOT_MATCHES}'
+          value: CHANGE_THIS
+          description: 'This macro is used in Network interface discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$NET.IF.IFDESCR.MATCHES}'
+          value: '.*'
+          description: 'This macro is used in Network interface discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$NET.IF.IFDESCR.NOT_MATCHES}'
+          value: CHANGE_THIS
+          description: 'This macro is used in Network interface discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$NET.IF.IFNAME.MATCHES}'
+          value: '.*'
+          description: 'This macro is used in Network interface discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$NET.IF.IFNAME.NOT_MATCHES}'
+          value: Miniport|Virtual|Teredo|Kernel|Loopback|Bluetooth|HTTPS|6to4|QoS|Layer
+          description: 'This macro is used in Network interface discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$NET.IF.UTIL.MAX}'
+          value: '90'
+        -
+          macro: '{$PERF.COUNTERS.PERCENT.DATA.LOSS}'
+          value: '35'
+          description: 'Процент потери данных по счетчикам CPU и Memory'
+        -
+          macro: '{$SERVICE.CONTROL}'
+          value: '1'
+          description: '1 (default) - Enable, 0 - Disable Control Service State'
+        -
+          macro: '{$SERVICE.MIN.PROBLEM.INTERVAL}'
+          value: '#3'
+          description: 'Интервал после которого срабатывает триггер по работе службы.'
+        -
+          macro: '{$SERVICE.NAME.MATCHES}'
+          value: ^CHANGE_THIS$
+          description: 'This macro is used in Service discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$SERVICE.NAME.NOT_MATCHES}'
+          value: '^(?:RemoteRegistry|MMCSS|gupdate|SysmonLog|clr_optimization_v.+|clr_optimization_v.+|sppsvc|gpsvc|Pml Driver HPZ12|Net Driver HPZ12|MapsBroker|IntelAudioService|Intel\(R\) TPM Provisioning Service|dbupdate|DoSvc)$'
+          description: 'This macro is used in Service discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$SERVICE.STARTUPNAME.MATCHES}'
+          value: '^(?:automatic|automatic delayed)$'
+          description: 'This macro is used in Service discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$SERVICE.STARTUPNAME.NOT_MATCHES}'
+          value: '^(?:manual|disabled)$'
+          description: 'This macro is used in Service discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$SYSTEM.FUZZYTIME.MAX}'
+          value: '60'
+          description: 'The threshold for difference of system time in seconds.'
+        -
+          macro: '{$VFS.DEV.DEVNAME.MATCHES}'
+          value: '.*'
+          description: 'This macro is used in physical disks discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$VFS.DEV.DEVNAME.NOT_MATCHES}'
+          value: '(?:^\d+$|_Total)'
+          description: 'This macro is used in physical disks discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$VFS.DEV.READ.AWAIT.WARN}'
+          value: '0.04'
+          description: 'Disk read average response time (in s) before the trigger would fire.'
+        -
+          macro: '{$VFS.DEV.UTIL.MAX.WARN}'
+          value: '95'
+          description: 'The warning threshold of disk time utilization in percent.'
+        -
+          macro: '{$VFS.DEV.WRITE.AWAIT.WARN}'
+          value: '0.04'
+          description: 'Disk write average response time (in s) before the trigger would fire.'
+        -
+          macro: '{$VFS.FS.CHANGES.PERCENT}'
+          value: '5'
+          description: 'Порог изменения места на диске в %'
+        -
+          macro: '{$VFS.FS.FREE.MIN.CRIT}'
+          value: 500M
+          description: 'The critical threshold of the filesystem utilization.'
+        -
+          macro: '{$VFS.FS.FREE.MIN.CRIT:"C:"}'
+          value: 100M
+        -
+          macro: '{$VFS.FS.FREE.MIN.WARN}'
+          value: 10G
+          description: 'The warning threshold of the filesystem utilization.'
+        -
+          macro: '{$VFS.FS.FSDRIVETYPE.MATCHES}'
+          value: fixed
+          description: 'This macro is used in filesystems discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$VFS.FS.FSDRIVETYPE.NOT_MATCHES}'
+          value: ^\s$
+          description: 'This macro is used in filesystems discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$VFS.FS.FSNAME.MATCHES}'
+          value: '.*'
+          description: 'This macro is used in filesystems discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$VFS.FS.FSNAME.NOT_MATCHES}'
+          value: '^(?:/dev|/sys|/run|/proc|.+/shm|C:\\VeeamFLR.*|C:\\Program Files\\Citrix\\PvsVm\\Service\\PersistedData$)'
+          description: 'This macro is used in filesystems discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$VFS.FS.FSTYPE.MATCHES}'
+          value: '.*'
+          description: 'This macro is used in filesystems discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$VFS.FS.FSTYPE.NOT_MATCHES}'
+          value: ^\s$
+          description: 'This macro is used in filesystems discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$VFS.FS.NODATA.PERIOD}'
+          value: 3h
+          description: 'Период срабатывания триггера по отсутствию данных по свободному месту на диске.'
+        -
+          macro: '{$VFS.FS.PUSED.MAX.CRIT}'
+          value: '100'
+          description: 'DISABLED.The critical threshold of the filesystem utilization in percent.'
+        -
+          macro: '{$VFS.FS.PUSED.MAX.WARN}'
+          value: '90'
+          description: 'The warning threshold of the filesystem utilization in percent.'
+      dashboards:
+        -
+          uuid: bd5047aac0d745dd85693bb05f3e71b8
+          name: 'Netowrk interfaces'
+          pages:
+            - {  }
+        -
+          uuid: edc1b2e572ca4dbc9a062ba02b92c5f0
+          name: 'System performance'
+          pages:
+            -
+              widgets:
+                -
+                  type: GRAPH_CLASSIC
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'POLYUS Template OS Windows by Zabbix agent'
+                        name: 'CPU usage'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '12'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '1'
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        host: 'POLYUS Template OS Windows by Zabbix agent'
+                        key: 'perf_counter_en["\System\Processor Queue Length"]'
+                -
+                  type: GRAPH_CLASSIC
+                  'y': '5'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'POLYUS Template OS Windows by Zabbix agent'
+                        name: 'Memory utilization'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '12'
+                  'y': '5'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'POLYUS Template OS Windows by Zabbix agent'
+                        name: 'Swap usage'
+                -
+                  type: GRAPH_PROTOTYPE
+                  'y': '10'
+                  width: '24'
+                  height: '5'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: columns
+                      value: '1'
+                    -
+                      type: GRAPH_PROTOTYPE
+                      name: graphid
+                      value:
+                        host: 'POLYUS Template OS Windows by Zabbix agent'
+                        name: '{#FSNAME}: Disk space usage'
+                -
+                  type: GRAPH_PROTOTYPE
+                  'y': '15'
+                  width: '24'
+                  height: '5'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: columns
+                      value: '1'
+                    -
+                      type: GRAPH_PROTOTYPE
+                      name: graphid
+                      value:
+                        host: 'POLYUS Template OS Windows by Zabbix agent'
+                        name: '{#DEVNAME}: Disk read/write rates'
+                -
+                  type: GRAPH_PROTOTYPE
+                  'y': '20'
+                  width: '24'
+                  height: '5'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: columns
+                      value: '1'
+                    -
+                      type: GRAPH_PROTOTYPE
+                      name: graphid
+                      value:
+                        host: 'POLYUS Template OS Windows by Zabbix agent'
+                        name: '{#DEVNAME}: Disk utilization and queue'
+      valuemaps:
+        -
+          uuid: 760f59d3ab5347ae9ee9a9ed6ff2174b
+          name: 'ICMP Service State'
+          mappings:
+            -
+              value: '0'
+              newvalue: Down
+            -
+              value: '1'
+              newvalue: Up
+        -
+          uuid: 58f1315cfa504cb9832ae5f287f7297c
+          name: 'Win32_NetworkAdapter::AdapterTypeId'
+          mappings:
+            -
+              value: '0'
+              newvalue: 'Ethernet 802.3'
+            -
+              value: '1'
+              newvalue: 'Token Ring 802.5'
+            -
+              value: '2'
+              newvalue: 'Fiber Distributed Data Interface (FDDI)'
+            -
+              value: '3'
+              newvalue: 'Wide Area Network (WAN)'
+            -
+              value: '4'
+              newvalue: LocalTalk
+            -
+              value: '5'
+              newvalue: 'Ethernet using DIX header format'
+            -
+              value: '6'
+              newvalue: ARCNET
+            -
+              value: '7'
+              newvalue: 'ARCNET (878.2)'
+            -
+              value: '8'
+              newvalue: ATM
+            -
+              value: '9'
+              newvalue: Wireless
+            -
+              value: '10'
+              newvalue: 'Infrared Wireless'
+            -
+              value: '11'
+              newvalue: Bpc
+            -
+              value: '12'
+              newvalue: CoWan
+            -
+              value: '13'
+              newvalue: '1394'
+        -
+          uuid: 9ab1f152ab214b55840ea6038ff1214d
+          name: 'Win32_NetworkAdapter::NetConnectionStatus'
+          mappings:
+            -
+              value: '0'
+              newvalue: Disconnected
+            -
+              value: '1'
+              newvalue: Connecting
+            -
+              value: '2'
+              newvalue: Connected
+            -
+              value: '3'
+              newvalue: Disconnecting
+            -
+              value: '4'
+              newvalue: 'Hardware Not Present'
+            -
+              value: '5'
+              newvalue: 'Hardware Disabled'
+            -
+              value: '6'
+              newvalue: 'Hardware Malfunction'
+            -
+              value: '7'
+              newvalue: 'Media Disconnected'
+            -
+              value: '8'
+              newvalue: Authenticating
+            -
+              value: '9'
+              newvalue: 'Authentication Succeeded'
+            -
+              value: '10'
+              newvalue: 'Authentication Failed'
+            -
+              value: '11'
+              newvalue: 'Invalid Address'
+            -
+              value: '12'
+              newvalue: 'Credentials Required'
+        -
+          uuid: d532ee7f92784817bc2f3bb433da88ac
+          name: 'Windows service state'
+          mappings:
+            -
+              value: '0'
+              newvalue: Running
+            -
+              value: '1'
+              newvalue: Paused
+            -
+              value: '2'
+              newvalue: 'Start pending'
+            -
+              value: '3'
+              newvalue: 'Pause pending'
+            -
+              value: '4'
+              newvalue: 'Continue pending'
+            -
+              value: '5'
+              newvalue: 'Stop pending'
+            -
+              value: '6'
+              newvalue: Stopped
+            -
+              value: '7'
+              newvalue: Unknown
+            -
+              value: '255'
+              newvalue: 'No such service'
+        -
+          uuid: e9f29ba86bdd4d54a0ff01ab6addfd7f
+          name: zabbix.host.available
+          mappings:
+            -
+              value: '0'
+              newvalue: 'not available'
+            -
+              value: '1'
+              newvalue: available
+            -
+              value: '2'
+              newvalue: unknown
+        -
+          uuid: ea152a1b7d9746eb99e974b66f1a2833
+          name: zabbix.host.maintenance
+          mappings:
+            -
+              value: '0'
+              newvalue: normal
+            -
+              value: '1'
+              newvalue: 'maintenance with data collection'
+            -
+              value: '2'
+              newvalue: 'maintenance without data collection'
+        -
+          uuid: 5e3c15b951b6400882be16323ad1f63a
+          name: 'Zabbix agent ping status'
+          mappings:
+            -
+              value: '1'
+              newvalue: Up
+  triggers:
+    -
+      uuid: df0e17fd921c4a389a6dca65f9962d5b
+      expression: 'min(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\System\Processor Queue Length"],30m) - last(/POLYUS Template OS Windows by Zabbix agent/wmi.get[root/cimv2,"Select NumberOfLogicalProcessors from Win32_ComputerSystem"]) * 2 > {$CPU.QUEUE.CRIT.MAX}'
+      name: 'CPU queue length is too high (over {$CPU.QUEUE.CRIT.MAX} for 30m)'
+      opdata: 'Last: {ITEM.LASTVALUE1}'
+      status: DISABLED
+      priority: WARNING
+      description: 'The CPU Queue Length in the last 15 minutes exceeds {$CPU.QUEUE.CRIT.MAX}. According to actual observations, PQL should not exceed the number of cores * 2. To fine-tune the conditions, use the macro {$CPU.QUEUE.CRIT.MAX }.'
+      dependencies:
+        -
+          name: 'High CPU utilization (over {$CPU.UTIL.CRIT}% for 30m)'
+          expression: 'min(/POLYUS Template OS Windows by Zabbix agent/system.cpu.util,30m)>{$CPU.UTIL.CRIT}'
+      tags:
+        -
+          tag: scope
+          value: performance
+    -
+      uuid: 669712a4ae3c4977927c6903812da5b2
+      expression: 'max(/POLYUS Template OS Windows by Zabbix agent/system.swap.pfree,30m)<{$MEM.SWAP.PFREE.MIN.WARN} and last(/POLYUS Template OS Windows by Zabbix agent/system.swap.size[,total])>0'
+      name: 'High swap space usage (less than {$MEM.SWAP.PFREE.MIN.WARN}% free)'
+      opdata: 'Free: {ITEM.LASTVALUE1}, total: {ITEM.LASTVALUE2}'
+      status: DISABLED
+      description: 'This trigger is ignored, if there is no swap configured'
+      manual_close: 'YES'
+      dependencies:
+        -
+          name: 'High memory utilization (>{$MEM.UTIL.MAX}% for {$MEM.UTIL.MAX.TIME})'
+          expression: 'min(/POLYUS Template OS Windows by Zabbix agent/vm.memory.util,{$MEM.UTIL.MAX.TIME})>{$MEM.UTIL.MAX}'
+      tags:
+        -
+          tag: scope
+          value: performance
+    -
+      uuid: 44d5e52ecb744d36b93445b63db19d60
+      expression: |
+        100-(count(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\Processor Information(_total)\% Processor Time",60],60m))/60*100>{$PERF.COUNTERS.PERCENT.DATA.LOSS}
+        or
+        100-(count(/POLYUS Template OS Windows by Zabbix agent/vm.memory.size[used],60m))/60*100>{$PERF.COUNTERS.PERCENT.DATA.LOSS}
+        or
+        nodata(/POLYUS Template OS Windows by Zabbix agent/perf_counter_en["\Processor Information(_total)\% Processor Time",60],60m)=1
+        or
+        nodata(/POLYUS Template OS Windows by Zabbix agent/vm.memory.size[used],60m)=1
+      name: 'Performance counters data loss > {$PERF.COUNTERS.PERCENT.DATA.LOSS}%'
+      status: DISABLED
+      priority: INFO
+      description: 'Периодически не приходят данные по счетчикам производительности. Нужно проверить работоспособность сервера и агента Zabbix.'
+      manual_close: 'YES'
+      dependencies:
+        -
+          name: 'Zabbix agent is not available (for {$AGENT.TIMEOUT})'
+          expression: |
+            max(/POLYUS Template OS Windows by Zabbix agent/zabbix[host,agent,available],{$AGENT.TIMEOUT})=0 and
+            last(/POLYUS Template OS Windows by Zabbix agent/zabbix[host,,maintenance])=0
+    -
+      uuid: c7224a9af2c343e3ba46f65655310877
+      expression: |
+        max(/POLYUS Template OS Windows by Zabbix agent/zabbix[host,agent,available],{$AGENT.TIMEOUT})=0 and
+        last(/POLYUS Template OS Windows by Zabbix agent/zabbix[host,,maintenance])=0
+      name: 'Zabbix agent is not available (for {$AGENT.TIMEOUT})'
+      priority: AVERAGE
+      description: 'For passive only agents, host availability is used with {$AGENT.TIMEOUT} as time threshold.'
+      manual_close: 'YES'
+      dependencies:
+        -
+          name: 'Unavailable by ICMP ping'
+          expression: '{$ICMP.CONTROL.PING}=1 and max(/POLYUS Template OS Windows by Zabbix agent/icmpping[,,,,{$ICMP_PACKET_TIMEOUT}],{$ICMP_UNAVAILABLE_PERIOD})=0'
+          recovery_expression: 'min(/POLYUS Template OS Windows by Zabbix agent/icmpping[,,,,{$ICMP_PACKET_TIMEOUT}],#2)=1'
+      tags:
+        -
+          tag: scope
+          value: availability
+        -
+          tag: trigger_tag
+          value: '{HOST.HOST} Zabbix agent is not available'
+  graphs:
+    -
+      uuid: ac0ba83bc42d45cab7f53634dd187da0
+      name: 'CPU jumps'
+      graph_items:
+        -
+          color: 1A7C11
+          item:
+            host: 'POLYUS Template OS Windows by Zabbix agent'
+            key: 'perf_counter_en["\System\Context Switches/sec"]'
+        -
+          sortorder: '1'
+          color: 2774A4
+          item:
+            host: 'POLYUS Template OS Windows by Zabbix agent'
+            key: 'perf_counter_en["\Processor Information(_total)\% Interrupt Time"]'
+    -
+      uuid: c61021fbaad341a281bcbd3e27a1c209
+      name: 'CPU usage'
+      type: STACKED
+      ymin_type_1: FIXED
+      ymax_type_1: FIXED
+      graph_items:
+        -
+          color: 1A7C11
+          item:
+            host: 'POLYUS Template OS Windows by Zabbix agent'
+            key: 'perf_counter_en["\Processor Information(_total)\% User Time"]'
+        -
+          sortorder: '1'
+          color: 2774A4
+          item:
+            host: 'POLYUS Template OS Windows by Zabbix agent'
+            key: 'perf_counter_en["\Processor Information(_total)\% Privileged Time"]'
+    -
+      uuid: 096e9e010d434c3496a8d2b636f1f0d0
+      name: 'CPU utilization'
+      ymin_type_1: FIXED
+      ymax_type_1: FIXED
+      graph_items:
+        -
+          drawtype: GRADIENT_LINE
+          color: 1A7C11
+          item:
+            host: 'POLYUS Template OS Windows by Zabbix agent'
+            key: system.cpu.util
+    -
+      uuid: 16a87fdb326b43c4aead01b7d5ec11c4
+      name: 'Memory utilization'
+      ymin_type_1: FIXED
+      ymax_type_1: FIXED
+      graph_items:
+        -
+          drawtype: GRADIENT_LINE
+          color: 1A7C11
+          item:
+            host: 'POLYUS Template OS Windows by Zabbix agent'
+            key: vm.memory.util
+    -
+      uuid: ca7d0dd8b3c1483b88d17b7257ebcd76
+      name: 'Swap usage'
+      graph_items:
+        -
+          color: 1A7C11
+          item:
+            host: 'POLYUS Template OS Windows by Zabbix agent'
+            key: system.swap.free
+        -
+          sortorder: '1'
+          color: 2774A4
+          item:
+            host: 'POLYUS Template OS Windows by Zabbix agent'
+            key: 'system.swap.size[,total]'
