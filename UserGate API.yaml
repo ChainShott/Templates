@@ -1,0 +1,625 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-10-29T05:58:48Z'
+  groups:
+    -
+      uuid: 14cb425d81704d04b3d8016d5a0ccf20
+      name: Channels
+    -
+      uuid: 97e05256ffdf4e39bbdab2f9421c6099
+      name: UserGate
+  templates:
+    -
+      uuid: 84bf8595b3124e64993bf1e310fb3a20
+      template: 'Template UserGate API External check'
+      name: 'Template UserGate API External check'
+      groups:
+        -
+          name: Channels
+        -
+          name: UserGate
+      items:
+        -
+          uuid: 8deb240c21cc47af8760de3539ef9548
+          name: 'Concurrent Users'
+          type: DEPENDENT
+          key: concurrent_users
+          delay: '0'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.concurrent_users
+              error_handler: CUSTOM_VALUE
+              error_handler_params: '0'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - |
+                  if (value == ""){
+                  value = 0};
+                  return value
+          master_item:
+            key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+          tags:
+            -
+              tag: Application
+              value: SysStat
+            -
+              tag: Application
+              value: users
+          triggers:
+            -
+              uuid: 0de5ad9ae4bf460da9b8b80457e4c657
+              expression: 'nodata(/Template UserGate API External check/concurrent_users,10m)=1'
+              name: 'Нет api данных от {HOST.NAME}'
+              priority: AVERAGE
+              tags:
+                -
+                  tag: usergate_api
+                  value: nodata
+        -
+          uuid: 4b992be569e64fe4b0c025f8b6c057d6
+          name: CPU
+          type: DEPENDENT
+          key: cpu_used
+          delay: '0'
+          units: '%'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.cpu_used
+          master_item:
+            key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+          tags:
+            -
+              tag: Application
+              value: cpu
+            -
+              tag: Application
+              value: SysStat
+        -
+          uuid: 4238319a4bd941118f5259f6f239ee76
+          name: 'Memory Buffers'
+          type: DEPENDENT
+          key: memory_buffers
+          delay: '0'
+          units: B
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.memory.buffers
+            -
+              type: MULTIPLIER
+              parameters:
+                - '1024'
+          master_item:
+            key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+          tags:
+            -
+              tag: Application
+              value: memory
+            -
+              tag: Application
+              value: SysStat
+        -
+          uuid: 6a71955882db455fb8f6ee1f0866f62b
+          name: 'Memory Cached'
+          type: DEPENDENT
+          key: memory_cached
+          delay: '0'
+          units: B
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.memory.cached
+            -
+              type: MULTIPLIER
+              parameters:
+                - '1024'
+          master_item:
+            key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+          tags:
+            -
+              tag: Application
+              value: memory
+            -
+              tag: Application
+              value: SysStat
+        -
+          uuid: 86eea554ca9d4489bbc6508019b8103e
+          name: 'Memory Kcached'
+          type: DEPENDENT
+          key: memory_kcached
+          delay: '0'
+          units: B
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.memory.kcached
+            -
+              type: MULTIPLIER
+              parameters:
+                - '1024'
+          master_item:
+            key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+          tags:
+            -
+              tag: Application
+              value: memory
+            -
+              tag: Application
+              value: SysStat
+        -
+          uuid: a2df9350817745c2885f67c7c161c799
+          name: 'Memory Used'
+          type: DEPENDENT
+          key: memory_used
+          delay: '0'
+          units: B
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.memory.used
+            -
+              type: MULTIPLIER
+              parameters:
+                - '1024'
+          master_item:
+            key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+          tags:
+            -
+              tag: Application
+              value: memory
+            -
+              tag: Application
+              value: SysStat
+        -
+          uuid: f8355d5c510e4106bae8fb59191725a6
+          name: 'Get raid status'
+          type: SCRIPT
+          key: raid.check
+          delay: 10m
+          history: 1d
+          trends: '0'
+          status: DISABLED
+          value_type: TEXT
+          params: |
+            try {
+                //Параметры передаются в виде JSON
+                var params = JSON.parse(value);
+                
+                // Обратно сериализуем объект params
+                return JSON.stringify(params);
+            }
+            
+            catch (error) {
+                Zabbix.Log(3, '[Usergate_RAID] ERROR: ' + error);
+                throw 'Usergate_RAID: ' + error;
+            }
+          parameters:
+            -
+              name: user
+              value: '{$USERGATE_USER}'
+            -
+              name: password
+              value: '{$USERGATE_PASSWORD}'
+            -
+              name: api_endpoint
+              value: '{$USERGATE.API.IP}'
+        -
+          uuid: 47a2db449933401084e40d2418fbd8b7
+          name: 'Swap Free'
+          type: DEPENDENT
+          key: swap_free
+          delay: '0'
+          units: B
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.swap.free
+            -
+              type: MULTIPLIER
+              parameters:
+                - '1024'
+          master_item:
+            key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+          tags:
+            -
+              tag: Application
+              value: swap
+            -
+              tag: Application
+              value: SysStat
+        -
+          uuid: 5ecee5719751461ebe30dc1492de192a
+          name: 'Swap Used'
+          type: DEPENDENT
+          key: swap_used
+          delay: '0'
+          units: B
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.swap.used
+            -
+              type: MULTIPLIER
+              parameters:
+                - '1024'
+          master_item:
+            key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+          tags:
+            -
+              tag: Application
+              value: swap
+            -
+              tag: Application
+              value: SysStat
+        -
+          uuid: b33076f71b96420f94d3d75af2d69751
+          name: 'UserGate Api External check'
+          type: EXTERNAL
+          key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+          delay: 2m
+          history: '0'
+          trends: '0'
+          value_type: TEXT
+          tags:
+            -
+              tag: Application
+              value: 'External check'
+        -
+          uuid: 7d38772495bc437d974ceb26f2a2c78f
+          name: 'vCPU Used'
+          type: DEPENDENT
+          key: vcpu_used
+          delay: '0'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.vcpu_used
+          master_item:
+            key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+          tags:
+            -
+              tag: Application
+              value: cpu
+            -
+              tag: Application
+              value: SysStat
+      discovery_rules:
+        -
+          uuid: 452ccf5b08264988b98ba20505bede21
+          name: 'UserGate gateways discovery rule'
+          type: DEPENDENT
+          key: gateways.discovery
+          delay: '0'
+          lifetime: 3d
+          item_prototypes:
+            -
+              uuid: c621fad8960c44009ad25daa9b806122
+              name: '{#GW_NAME}({#GW_IP}) Active status'
+              type: DEPENDENT
+              key: 'active_st.[{#GW_ID}]'
+              delay: '0'
+              valuemap:
+                name: OperState
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.gateways.["{#GW_NAME}"].active'
+                -
+                  type: JAVASCRIPT
+                  parameters:
+                    - |
+                      switch(value.toLowerCase()) {
+                      	case 'false': return 0; 
+                      	case 'true': return 1; 
+                      	default: return 2;
+                      };
+              master_item:
+                key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+              tags:
+                -
+                  tag: Application
+                  value: gateways
+            -
+              uuid: 177d8b3e02ab417fa35c5b3a1f351fa5
+              name: '{#GW_NAME}({#GW_IP}) Enabled status'
+              type: DEPENDENT
+              key: 'enabled_st.[{#GW_ID}]'
+              delay: '0'
+              valuemap:
+                name: 'True\False value'
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.gateways.["{#GW_NAME}"].enabled'
+                -
+                  type: JAVASCRIPT
+                  parameters:
+                    - |
+                      switch(value.toLowerCase()) {
+                      	case 'false': return 0; 
+                      	case 'true': return 1; 
+                      	default: return 2;
+                      };
+              master_item:
+                key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+              tags:
+                -
+                  tag: Application
+                  value: gateways
+          master_item:
+            key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+          lld_macro_paths:
+            -
+              lld_macro: '{#ACTIVE}'
+              path: $.active
+            -
+              lld_macro: '{#ENABLED}'
+              path: $.enabled
+            -
+              lld_macro: '{#GW_ID}'
+              path: $.id
+            -
+              lld_macro: '{#GW_IP}'
+              path: $.ipv4
+            -
+              lld_macro: '{#GW_NAME}'
+              path: $.name
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.gateways[*]'
+        -
+          uuid: 05babefef21a416a9000be8f8d74746a
+          name: 'UserGate Interfaces discovery rule'
+          type: DEPENDENT
+          key: interfaces.discovery
+          delay: '0'
+          lifetime: 3d
+          item_prototypes:
+            -
+              uuid: 687926309b95490abdf965f9a506bcc7
+              name: '{#IFNAME} Description'
+              type: DEPENDENT
+              key: 'description.[{#PORT_ID}]'
+              delay: '0'
+              trends: '0'
+              status: DISABLED
+              discover: NO_DISCOVER
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.throughput.["{#IFNAME}"].description'
+              master_item:
+                key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+              tags:
+                -
+                  tag: Application
+                  value: interfaces
+            -
+              uuid: 14ac4de96e304ba8aae0275c7d9d0c1e
+              name: '{#IFNAME}({#DESCRIPTION}) Received bits per second'
+              type: DEPENDENT
+              key: 'kb_read.[{#PORT_ID}]'
+              delay: '0'
+              value_type: FLOAT
+              units: bps
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.throughput.["{#IFNAME}"].kb_read'
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '8000'
+              master_item:
+                key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+              tags:
+                -
+                  tag: Application
+                  value: interfaces
+            -
+              uuid: bd1888eaaa1042b5a22990952feb6eff
+              name: '{#IFNAME}({#DESCRIPTION}) Transmitted bits per second'
+              type: DEPENDENT
+              key: 'kb_write.[{#PORT_ID}]'
+              delay: '0'
+              value_type: FLOAT
+              units: bps
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.throughput.["{#IFNAME}"].kb_write'
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '8000'
+              master_item:
+                key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+              tags:
+                -
+                  tag: Application
+                  value: interfaces
+            -
+              uuid: 4043b45698e441088841cd22ebd94d38
+              name: '{#IFNAME}({#DESCRIPTION}) Operstate'
+              type: DEPENDENT
+              key: 'operstate.[{#PORT_ID}]'
+              delay: '0'
+              valuemap:
+                name: OperState
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.throughput.["{#IFNAME}"].operstate'
+                -
+                  type: JAVASCRIPT
+                  parameters:
+                    - |
+                      switch(value.toLowerCase()) {
+                      	case 'down': return 0; 
+                      	case 'up': return 1; 
+                      	case 'link_unknown': return 2; 
+                      	case 'no_link': return 3; 
+                              case 'unknown': return 4; 
+                      	default: return 4;
+                      };
+                      
+              master_item:
+                key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+              tags:
+                -
+                  tag: Application
+                  value: interfaces
+            -
+              uuid: 48b7fa87cb6547aab238f35346484736
+              name: '{#IFNAME}({#DESCRIPTION}) Received packets per second'
+              type: DEPENDENT
+              key: 'pck_read.[{#PORT_ID}]'
+              delay: '0'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.throughput.["{#IFNAME}"].pck_read'
+              master_item:
+                key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+              tags:
+                -
+                  tag: Application
+                  value: interfaces
+            -
+              uuid: ec044e27d59745e4b9e483c69adf1491
+              name: '{#IFNAME}({#DESCRIPTION}) Transmitted packets per second'
+              type: DEPENDENT
+              key: 'pck_write.[{#PORT_ID}]'
+              delay: '0'
+              value_type: FLOAT
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.throughput.["{#IFNAME}"].pck_write'
+              master_item:
+                key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+              tags:
+                -
+                  tag: Application
+                  value: interfaces
+            -
+              uuid: 0d0866b26db1433099f9bc5fad26e1d2
+              name: '{#IFNAME}({#DESCRIPTION}) running status'
+              type: DEPENDENT
+              key: 'running.[{#PORT_ID}]'
+              delay: '0'
+              trends: '0'
+              value_type: TEXT
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.throughput.["{#IFNAME}"].running'
+              master_item:
+                key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+              tags:
+                -
+                  tag: Application
+                  value: interfaces
+          master_item:
+            key: 'usergate_get_api.py["-c", "{$HOST.API.IP}", "-u", "{$USERGATE_USER}", "-p", "{$USERGATE_PASSWORD}"]'
+          lld_macro_paths:
+            -
+              lld_macro: '{#DESCRIPTION}'
+              path: $.description
+            -
+              lld_macro: '{#ENABLED}'
+              path: $.enabled
+            -
+              lld_macro: '{#IFNAME}'
+              path: $.name
+            -
+              lld_macro: '{#PORT_ID}'
+              path: $.id
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.throughput[*]'
+      macros:
+        -
+          macro: '{$HOST.API.IP}'
+          value: '{HOST.IP}'
+        -
+          macro: '{$SNMP_TIMEOUT}'
+          value: 5m
+        -
+          macro: '{$SWAP.FREE.MIN.WARN}'
+          value: 250M
+        -
+          macro: '{$USERGATE.API.IP}'
+          value: 'http://{HOST.IP}:4040/rpc'
+        -
+          macro: '{$USERGATE_PASSWORD}'
+          type: SECRET_TEXT
+        -
+          macro: '{$USERGATE_USER}'
+          value: ug_mon_api
+      valuemaps:
+        -
+          uuid: 10a798e55ad6453bac33858e12ec6f54
+          name: OperState
+          mappings:
+            -
+              value: '0'
+              newvalue: down
+            -
+              value: '1'
+              newvalue: up
+            -
+              value: '2'
+              newvalue: link_unknown
+            -
+              value: '3'
+              newvalue: no_link
+        -
+          uuid: bb763388fb4f4c6d91f5cf48a97a353c
+          name: 'True\False value'
+          mappings:
+            -
+              value: '0'
+              newvalue: 'False'
+            -
+              value: '1'
+              newvalue: 'True'
+            -
+              value: '2'
+              newvalue: Unknown
+  triggers:
+    -
+      uuid: d33803add6d94ebb8b265c1f8bda04c5
+      expression: 'max(/Template UserGate API External check/swap_free,5m)<{$SWAP.FREE.MIN.WARN} and last(/Template UserGate API External check/swap_used)>0'
+      name: 'High swap space usage'
+      event_name: 'High swap space usage (less than {$SWAP.FREE.MIN.WARN} free). Нужно сообщить Андрею Блинову'
+      opdata: 'Free: {ITEM.LASTVALUE1}, Used: {ITEM.LASTVALUE2}'
+      priority: WARNING
+      description: 'Заканчивается SWAP.'
