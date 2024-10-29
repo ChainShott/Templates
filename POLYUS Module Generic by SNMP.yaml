@@ -1,0 +1,390 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-10-29T06:16:56Z'
+  groups:
+    -
+      uuid: 36bff6c29af64692839d077febfc7079
+      name: 'Templates/Network devices'
+    -
+      uuid: 437994976f454c02b9f817dc5e977e2c
+      name: Templates/POLYUS
+    -
+      uuid: 35d37788679240358409a26e5547efeb
+      name: 'Test templates'
+  templates:
+    -
+      uuid: fabd4fd1e1f3496f80ea913842589059
+      template: 'POLYUS Module Generic by SNMP'
+      name: 'POLYUS Module Generic by SNMP'
+      description: |
+        Template Module Generic
+        
+        MIBs used:
+        HOST-RESOURCES-MIB
+        SNMPv2-MIB
+        
+        Template tooling version used: 0.43
+      templates:
+        -
+          name: 'POLYUS Module ICMP Ping'
+      groups:
+        -
+          name: 'Templates/Network devices'
+        -
+          name: Templates/POLYUS
+        -
+          name: 'Test templates'
+      items:
+        -
+          uuid: 3f38de9e6d2d423ebb0b8b3835b5eb87
+          name: 'SNMP traps (fallback)'
+          type: SNMP_TRAP
+          key: snmptrap.fallback
+          delay: '0'
+          history: 2w
+          trends: '0'
+          value_type: LOG
+          description: 'The item is used to collect all SNMP traps unmatched by other snmptrap items'
+          logtimefmt: 'hh:mm:sszyyyy/MM/dd'
+          tags:
+            -
+              tag: component
+              value: network
+        -
+          uuid: 3d13b2925ff6496e8ef65dab352c03cb
+          name: 'System contact details'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.2.1.1.4.0
+          key: 'system.contact[sysContact.0]'
+          delay: 15m
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: |
+            MIB: SNMPv2-MIB
+            The textual identification of the contact person for this managed node, together with information on how to contact this person.  If no contact information is known, the value is the zero-length string.
+          inventory_link: CONTACT
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 12h
+          tags:
+            -
+              tag: component
+              value: system
+        -
+          uuid: 47e0fcd895354d519419fc012bed9dcb
+          name: 'System description'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.2.1.1.1.0
+          key: 'system.descr[sysDescr.0]'
+          delay: 15m
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: |
+            MIB: SNMPv2-MIB
+            A textual description of the entity. This value should
+            include the full name and version identification of the system's hardware type, software operating-system, and
+            networking software.
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 12h
+          tags:
+            -
+              tag: component
+              value: system
+        -
+          uuid: 1b57a18d30874c669c15bff08c03da1b
+          name: 'Uptime (hardware)'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.2.1.25.1.1.0
+          key: 'system.hw.uptime[hrSystemUptime.0]'
+          history: 2w
+          trends: 0d
+          units: uptime
+          description: |
+            MIB: HOST-RESOURCES-MIB
+            The amount of time since this host was last initialized. Note that this is different from sysUpTime in the SNMPv2-MIB [RFC1907] because sysUpTime is the uptime of the network management portion of the system.
+          preprocessing:
+            -
+              type: CHECK_NOT_SUPPORTED
+              parameters:
+                - ''
+              error_handler: CUSTOM_VALUE
+              error_handler_params: '0'
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.01'
+          tags:
+            -
+              tag: component
+              value: system
+        -
+          uuid: e723de9145674cd0bc9a59d5787a3345
+          name: 'System location'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.2.1.1.6.0
+          key: 'system.location[sysLocation.0]'
+          delay: 15m
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: |
+            MIB: SNMPv2-MIB
+            The physical location of this node (e.g., `telephone closet, 3rd floor').  If the location is unknown, the value is the zero-length string.
+          inventory_link: LOCATION
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 12h
+          tags:
+            -
+              tag: component
+              value: system
+        -
+          uuid: 497a827fe13849b6a681d2b1d890a148
+          name: 'System name'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.2.1.1.5.0
+          key: system.name
+          delay: 15m
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: |
+            MIB: SNMPv2-MIB
+            An administratively-assigned name for this managed node.By convention, this is the node's fully-qualified domain name.  If the name is unknown, the value is the zero-length string.
+          inventory_link: NAME
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 12h
+          tags:
+            -
+              tag: component
+              value: system
+          triggers:
+            -
+              uuid: f8096fe913594a1b8eb28393f10bc13f
+              expression: 'change(/POLYUS Module Generic by SNMP/system.name) and length(last(/POLYUS Module Generic by SNMP/system.name))>0'
+              name: 'System name has changed'
+              event_name: 'System name has changed (new name: {ITEM.VALUE})'
+              description: 'The name of the system has changed. `Ack` to close the problem manually.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: notice
+                -
+                  tag: scope
+                  value: security
+        -
+          uuid: 1fdd89ecd6ab451789e457bb12ed5d05
+          name: 'Uptime (network)'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.2.1.1.3.0
+          key: 'system.net.uptime[sysUpTime.0]'
+          history: 2w
+          units: uptime
+          description: |
+            MIB: SNMPv2-MIB
+            The time (in hundredths of a second) since the network management portion of the system was last re-initialized.
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.01'
+          tags:
+            -
+              tag: component
+              value: system
+        -
+          uuid: bd788391b05d4f18bad7ee213554d5dd
+          name: 'System object ID'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.2.1.1.2.0
+          key: 'system.objectid[sysObjectID.0]'
+          delay: 15m
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: |
+            MIB: SNMPv2-MIB
+            The vendor's authoritative identification of the network management subsystem contained in the entity.  This value is allocated within the SMI enterprises subtree (1.3.6.1.4.1) and provides an easy and unambiguous means for determining`what kind of box' is being managed.  For example, if vendor`Flintstones, Inc.' was assigned the subtree1.3.6.1.4.1.4242, it could assign the identifier 1.3.6.1.4.1.4242.1.1 to its `Fred Router'.
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 12h
+          tags:
+            -
+              tag: component
+              value: system
+        -
+          uuid: 55d688d1027940b49f0122346f15cc88
+          name: Vendor
+          type: DEPENDENT
+          key: system.vendor
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          inventory_link: VENDOR
+          preprocessing:
+            -
+              type: JAVASCRIPT
+              parameters:
+                - |
+                  //SNMPv2-SMI::enterprises.9.1.2494
+                  //ccitt.1.3.6.1.4.1.38142
+                  //Private Enterprise Numbers
+                  //var pen = value.split('.')[1]
+                  var parts = value.split(/SNMPv2-SMI::enterprises.|1.3.6.1.4.1./)[1].split('.')
+                  var pen = parts[0]
+                  var prodid = parts[1]
+                  switch(pen){
+                    case '2': return 'IBM';
+                    case '9': return 'Cisco';
+                    case '11': return 'HP';
+                    case '318': return 'APC';
+                    case '388': return 'Symbol Technologies';
+                    case '534': return 'Eaton Corporation';
+                    case '935': return 'Phoenixtec Power Co';
+                    case '2011': return 'Huawei';
+                    case '1916': return 'Extreme Networks';
+                    case '3570': return 'Tait Limited';
+                    case '3808': return 'CyberPower';
+                    case '3942': return 'Infinet';
+                    case '6889': return 'AVAYA';
+                    case '12148': return 'ELTEK Energy';
+                    case '14988': return 'MikroTik';
+                    case '25053': return 'Ruckus';
+                    case '25506': if (prodid == '1') {return 'H3C';} else if (prodid == '11') {return 'HP';}
+                    case '34498': return 'IRBIS-T';
+                    case '35265': return 'Eltex';
+                    case '38142': return 'BHE';
+                    case '54661': return 'LLC NPO RPS';
+                    default: return 'Unknown';
+                  }
+                  
+          master_item:
+            key: 'system.objectid[sysObjectID.0]'
+          tags:
+            -
+              tag: component
+              value: system
+          triggers:
+            -
+              uuid: 6cff523e74d040138169bd72e92456ac
+              expression: 'last(/POLYUS Module Generic by SNMP/system.vendor)="Unknown"'
+              name: 'Unknown Vendor'
+              url: 'https://www.iana.org/assignments/enterprise-numbers'
+              priority: INFO
+              description: 'Нужно проверить Private Enterprise Number по базе  https://www.iana.org/assignments/enterprise-numbers и добавить номер в скрипт предобработки в шаблоне.'
+              manual_close: 'YES'
+        -
+          uuid: cc9f96fbb0c94486873c08ba5ce48a0e
+          name: 'SNMP agent availability'
+          type: INTERNAL
+          key: 'zabbix[host,snmp,available]'
+          history: 7d
+          description: |
+            Availability of SNMP checks on the host. The value of this item corresponds to availability icons in the host list.
+            Possible value:
+            0 - not available
+            1 - available
+            2 - unknown
+          valuemap:
+            name: zabbix.host.available
+          tags:
+            -
+              tag: component
+              value: health
+            -
+              tag: component
+              value: network
+          triggers:
+            -
+              uuid: d16a7ea78a824142966c82def6d72359
+              expression: '{$SNMP.NODATA.CONTROL}=1 and max(/POLYUS Module Generic by SNMP/zabbix[host,snmp,available],{$SNMP.TIMEOUT})=0'
+              name: 'No SNMP data collection'
+              event_name: 'No SNMP data collection last {$SNMP.TIMEOUT}'
+              opdata: 'Current state: {ITEM.LASTVALUE1}'
+              priority: WARNING
+              description: 'SNMP is not available for polling. Please check device connectivity and SNMP settings.'
+              manual_close: 'YES'
+              dependencies:
+                -
+                  name: 'Unavailable by ICMP ping'
+                  expression: '{$ICMP.CONTROL.PING}=1 and max(/POLYUS Module Generic by SNMP/icmpping[,,,,{$ICMP_PACKET_TIMEOUT}],{$ICMP_UNAVAILABLE_PERIOD})=0'
+                  recovery_expression: 'min(/POLYUS Module Generic by SNMP/icmpping[,,,,{$ICMP_PACKET_TIMEOUT}],#2)=1'
+              tags:
+                -
+                  tag: scope
+                  value: availability
+      tags:
+        -
+          tag: class
+          value: network
+        -
+          tag: target
+          value: snmp
+      macros:
+        -
+          macro: '{$SNMP.NODATA.CONTROL}'
+          value: '1'
+          description: '0 - триггер отключен, 1 - триггер включен (default)'
+        -
+          macro: '{$SNMP.TIMEOUT}'
+          value: 1h
+        -
+          macro: '{$UPTIME.CONTROL}'
+          value: '1'
+          description: '0 - триггер отключен, 1 - триггер включен (default)'
+      valuemaps:
+        -
+          uuid: b32a9377a27b4fe08841a4e1841f1f90
+          name: 'Service state'
+          mappings:
+            -
+              value: '0'
+              newvalue: Down
+            -
+              value: '1'
+              newvalue: Up
+        -
+          uuid: 4241c9b75a7a464eba4b9f0b0e6635fa
+          name: zabbix.host.available
+          mappings:
+            -
+              value: '0'
+              newvalue: 'not available'
+            -
+              value: '1'
+              newvalue: available
+            -
+              value: '2'
+              newvalue: unknown
+  triggers:
+    -
+      uuid: a058988fbf95495cbd37a77c513cef17
+      expression: '{$UPTIME.CONTROL}=1 and ((last(/POLYUS Module Generic by SNMP/system.hw.uptime[hrSystemUptime.0])>0 and last(/POLYUS Module Generic by SNMP/system.hw.uptime[hrSystemUptime.0])<10m) or (last(/POLYUS Module Generic by SNMP/system.hw.uptime[hrSystemUptime.0])=0 and last(/POLYUS Module Generic by SNMP/system.net.uptime[sysUpTime.0])<10m))'
+      name: 'Host has been restarted'
+      event_name: '{HOST.NAME} has been restarted (uptime < 10m)'
+      priority: WARNING
+      description: 'Uptime is less than 10 minutes.'
+      manual_close: 'YES'
+      dependencies:
+        -
+          name: 'No SNMP data collection'
+          expression: '{$SNMP.NODATA.CONTROL}=1 and max(/POLYUS Module Generic by SNMP/zabbix[host,snmp,available],{$SNMP.TIMEOUT})=0'
+      tags:
+        -
+          tag: scope
+          value: notice
