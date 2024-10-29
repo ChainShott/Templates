@@ -1,0 +1,309 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-10-29T06:08:53Z'
+  groups:
+    -
+      uuid: 437994976f454c02b9f817dc5e977e2c
+      name: Templates/POLYUS
+    -
+      uuid: 35d37788679240358409a26e5547efeb
+      name: 'Test templates'
+  templates:
+    -
+      uuid: e0edc955df12456184f5d73462722307
+      template: 'POLYUS Module Inventory Eltex'
+      name: 'POLYUS Module Inventory Eltex'
+      templates:
+        -
+          name: 'POLYUS Module Inventory IP-Networks'
+      groups:
+        -
+          name: Templates/POLYUS
+        -
+          name: 'Test templates'
+      items:
+        -
+          uuid: edfa1636dd63412192d2e2a5ca98d740
+          name: 'Hardware inventory raw'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#ENT_CLASS},1.3.6.1.2.1.47.1.1.1.1.5,{#ENT_SERIAL},1.3.6.1.2.1.47.1.1.1.1.11,{#ENT_MODEL},1.3.6.1.2.1.47.1.1.1.1.2]'
+          key: hardware.inventory.raw
+          delay: 1h
+          history: '0'
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$[?(@[''{#ENT_CLASS}'']== ''3'')].first()'
+          tags:
+            -
+              tag: component
+              value: raw
+        -
+          uuid: d33c734371ec49f5a761b8c95c4320a3
+          name: 'Hardware model name'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.35265.1.139.18.1.1.4.0
+          key: system.hw.model
+          delay: 1h
+          trends: '0'
+          value_type: CHAR
+          description: ELTEX-MES-ISS-SYSTEM-MIB
+          inventory_link: MODEL
+          tags:
+            -
+              tag: component
+              value: Inventory
+            -
+              tag: component
+              value: system
+        -
+          uuid: bbf197a5384140dbb39b109c166e16f7
+          name: 'Hardware serial number'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2076.81.1.120.0
+          key: system.hw.serialnumber
+          delay: 1h
+          trends: '0'
+          value_type: CHAR
+          description: fsiss.mib
+          inventory_link: SERIALNO_A
+          tags:
+            -
+              tag: component
+              value: Inventory
+            -
+              tag: component
+              value: system
+          triggers:
+            -
+              uuid: ed41f1d81c6a4b6d9ffee7c9ff76f7d8
+              expression: 'last(/POLYUS Module Inventory Eltex/system.hw.serialnumber,#1)<>last(/POLYUS Module Inventory Eltex/system.hw.serialnumber,#2) and length(last(/POLYUS Module Inventory Eltex/system.hw.serialnumber))>0'
+              recovery_mode: NONE
+              name: '[Rule] Device has been replaced (new serial number received)'
+              priority: INFO
+              description: |
+                Last value: {ITEM.LASTVALUE1}.
+                Device serial number has changed. Ack to close
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: Inventory
+      discovery_rules:
+        -
+          uuid: 5a1bf8078c0a409a88b6a920406e1af3
+          name: 'Entity Discovery'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#ENT_CLASS},1.3.6.1.2.1.47.1.1.1.1.5,{#ENT_NAME},1.3.6.1.2.1.47.1.1.1.1.7,{#ENT_SN},1.3.6.1.2.1.47.1.1.1.1.11]'
+          key: entity.discovery
+          delay: 1h
+          status: DISABLED
+          filter:
+            conditions:
+              -
+                macro: '{#ENT_CLASS}'
+                value: '[^3]'
+                formulaid: A
+              -
+                macro: '{#ENT_SN}'
+                value: .+
+                formulaid: B
+          lifetime: 14d
+          item_prototypes:
+            -
+              uuid: 9550a56bccdf457ca8c9182179065778
+              name: '{#ENT_NAME}: Hardware model name'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.47.1.1.1.1.2.{#SNMPINDEX}'
+              key: 'system.hw.model[entPhysicalDescr.{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              status: DISABLED
+              discover: NO_DISCOVER
+              value_type: CHAR
+              description: 'MIB: ENTITY-MIB'
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - 1d
+              tags:
+                -
+                  tag: component
+                  value: Inventory
+            -
+              uuid: 0efd5832fddd43adba2ee67e9bad3ea0
+              name: '{#ENT_NAME}: Hardware serial number'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.47.1.1.1.1.11.{#SNMPINDEX}'
+              key: 'system.hw.serialnum[entPhysicalSerialNum.{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              status: DISABLED
+              discover: NO_DISCOVER
+              value_type: CHAR
+              description: 'MIB: ENTITY-MIB'
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - 1d
+              tags:
+                -
+                  tag: component
+                  value: Inventory
+              trigger_prototypes:
+                -
+                  uuid: 1f91f650a1454374a7dc9daec12f5d7b
+                  expression: 'last(/POLYUS Module Inventory Eltex/system.hw.serialnum[entPhysicalSerialNum.{#SNMPINDEX}],#1)<>last(/POLYUS Module Inventory Eltex/system.hw.serialnum[entPhysicalSerialNum.{#SNMPINDEX}],#2) and length(last(/POLYUS Module Inventory Eltex/system.hw.serialnum[entPhysicalSerialNum.{#SNMPINDEX}]))>0'
+                  recovery_mode: NONE
+                  name: '{#ENT_NAME}: Device has been replaced (new serial number received)'
+                  status: DISABLED
+                  discover: NO_DISCOVER
+                  priority: INFO
+                  description: |
+                    Last value: {ITEM.LASTVALUE1}.
+                    Device serial number has changed. Ack to close
+                  tags:
+                    -
+                      tag: scope
+                      value: Inventory
+          overrides:
+            -
+              name: CPU
+              step: '3'
+              filter:
+                conditions:
+                  -
+                    macro: '{#ENT_CLASS}'
+                    value: '12'
+                    formulaid: A
+              operations:
+                -
+                  operationobject: ITEM_PROTOTYPE
+                  operator: REGEXP
+                  value: '.*'
+                  tags:
+                    -
+                      tag: Inventory
+                      value: CPU
+            -
+              name: FAN
+              step: '2'
+              filter:
+                conditions:
+                  -
+                    macro: '{#ENT_CLASS}'
+                    value: '7'
+                    formulaid: A
+              operations:
+                -
+                  operationobject: ITEM_PROTOTYPE
+                  operator: REGEXP
+                  value: '.*'
+                  tags:
+                    -
+                      tag: Inventory
+                      value: FAN
+            -
+              name: Module
+              step: '4'
+              filter:
+                conditions:
+                  -
+                    macro: '{#ENT_CLASS}'
+                    value: '9'
+                    formulaid: A
+              operations:
+                -
+                  operationobject: ITEM_PROTOTYPE
+                  operator: REGEXP
+                  value: '.*'
+                  tags:
+                    -
+                      tag: Inventory
+                      value: Module
+            -
+              name: Port
+              step: '7'
+              filter:
+                conditions:
+                  -
+                    macro: '{#ENT_CLASS}'
+                    value: '10'
+                    formulaid: A
+              operations:
+                -
+                  operationobject: ITEM_PROTOTYPE
+                  operator: REGEXP
+                  value: '.*'
+                  tags:
+                    -
+                      tag: Inventory
+                      value: Port
+            -
+              name: PSU
+              step: '1'
+              filter:
+                conditions:
+                  -
+                    macro: '{#ENT_CLASS}'
+                    value: '6'
+                    formulaid: A
+              operations:
+                -
+                  operationobject: ITEM_PROTOTYPE
+                  operator: REGEXP
+                  value: '.*'
+                  tags:
+                    -
+                      tag: Inventory
+                      value: PSU
+            -
+              name: Sensor
+              step: '6'
+              filter:
+                conditions:
+                  -
+                    macro: '{#ENT_CLASS}'
+                    value: '8'
+                    formulaid: A
+              operations:
+                -
+                  operationobject: ITEM_PROTOTYPE
+                  operator: REGEXP
+                  value: '.*'
+                  tags:
+                    -
+                      tag: Inventory
+                      value: Sensor
+            -
+              name: Stack
+              step: '5'
+              filter:
+                conditions:
+                  -
+                    macro: '{#ENT_CLASS}'
+                    value: '11'
+                    formulaid: A
+              operations:
+                -
+                  operationobject: ITEM_PROTOTYPE
+                  operator: REGEXP
+                  value: '.*'
+                  tags:
+                    -
+                      tag: Inventory
+                      value: Stack
+      tags:
+        -
+          tag: class
+          value: network
+        -
+          tag: target
+          value: eltex

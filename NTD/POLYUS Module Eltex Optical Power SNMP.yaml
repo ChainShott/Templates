@@ -1,0 +1,482 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-10-29T06:08:48Z'
+  groups:
+    -
+      uuid: ced7ce77ca614473a32123f0a5eacfbc
+      name: Templates/POLYUS/Network
+    -
+      uuid: 35d37788679240358409a26e5547efeb
+      name: 'Test templates'
+  templates:
+    -
+      uuid: 4921856a81d441d48a91170f8775a5c8
+      template: 'POLYUS Module Eltex Optical Power SNMP'
+      name: 'POLYUS Module Eltex Optical Power SNMP'
+      groups:
+        -
+          name: Templates/POLYUS/Network
+        -
+          name: 'Test templates'
+      discovery_rules:
+        -
+          uuid: f1ff386f351043d5bbf8c629bd846cf2
+          name: 'Optical Module Discovery for MES37xx'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#WAVELENGTH},1.3.6.1.4.1.35265.52.1.1.3.1.1.4, {#PORTNAME},1.3.6.1.2.1.31.1.1.1.1, {#TRANSCONTYPE},1.3.6.1.4.1.35265.52.1.1.3.1.1.1, {#TRANSTYPE},1.3.6.1.4.1.35265.52.1.1.3.1.1.2]'
+          key: eltex.entity.optical.discovery
+          delay: 1h
+          filter:
+            evaltype: OR
+            conditions:
+              -
+                macro: '{#TRANSCONTYPE}'
+                value: ^0$
+                operator: NOT_MATCHES_REGEX
+                formulaid: A
+          lifetime: 14d
+          description: |
+            MIB: ELTEX-PHY-MIB
+            1.3.6.1.4.1.35265.52.1.1
+          item_prototypes:
+            -
+              uuid: e601d6f437ab47ee9f32f73faab32dba
+              name: 'Interface {#PORTNAME} Optical module Type'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.35265.52.1.1.3.1.1.2.{#SNMPINDEX}'
+              key: 'eltex.eltexPhyTransceiverInfoType[{#SNMPINDEX}]'
+              delay: 1h
+              trends: '0'
+              value_type: CHAR
+              valuemap:
+                name: OpticalType
+              preprocessing:
+                -
+                  type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - 1d
+              tags:
+                -
+                  tag: component
+                  value: 'optical power'
+                -
+                  tag: interface
+                  value: '{#PORTNAME}'
+                -
+                  tag: value
+                  value: current
+            -
+              uuid: 218608cd0be540fabf86d41c38f508c8
+              name: 'Interface {#PORTNAME} Optical module Bias Current'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.35265.52.1.1.3.2.1.8.{#SNMPINDEX}.3.1'
+              key: 'eltex.entity.optical.biascurrent[{#PORTNAME}]'
+              delay: 3m
+              status: DISABLED
+              discover: NO_DISCOVER
+              value_type: FLOAT
+              units: mA
+              tags:
+                -
+                  tag: component
+                  value: 'optical power'
+                -
+                  tag: interface
+                  value: '{#PORTNAME}'
+                -
+                  tag: value
+                  value: current
+            -
+              uuid: 9290cc1816174e9da0173d4f53ac29fc
+              name: 'Interface {#PORTNAME} Optical Level Rx High Threshold dBm'
+              type: CALCULATED
+              key: 'eltex.entity.optical.rx.power.HighThreshold.dbm[{#PORTNAME}]'
+              delay: 1h
+              value_type: FLOAT
+              units: dBm
+              params: '10*log10(last(//eltex.entity.optical.rx.power.HighThreshold.mW[{#PORTNAME}]))'
+              description: 'Значение Alarm Threshold(dBm) считается по формуле от данных в milliWatts'
+              tags:
+                -
+                  tag: component
+                  value: 'optical power'
+                -
+                  tag: interface
+                  value: '{#PORTNAME}'
+                -
+                  tag: value
+                  value: threshold
+            -
+              uuid: 36b49d93df7b4ae3aaa1fd3a4dbb25fa
+              name: 'Interface {#PORTNAME} Optical Level Rx High Threshold mW'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.35265.52.1.1.3.2.1.4.{#SNMPINDEX}.5.1'
+              key: 'eltex.entity.optical.rx.power.HighThreshold.mW[{#PORTNAME}]'
+              delay: 1h
+              history: 7d
+              trends: 30d
+              value_type: FLOAT
+              units: mW
+              description: 'Значение Alarm Threshold(milliWatts) берется с SFP модуля'
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.0001'
+              tags:
+                -
+                  tag: component
+                  value: 'optical power'
+                -
+                  tag: interface
+                  value: '{#PORTNAME}'
+                -
+                  tag: value
+                  value: threshold
+            -
+              uuid: eff96772fc804be4b7437c37160e5c2f
+              name: 'Interface {#PORTNAME} Optical Level Rx Low Threshold dBm'
+              type: CALCULATED
+              key: 'eltex.entity.optical.rx.power.LowThreshold.dbm[{#PORTNAME}]'
+              delay: 1h
+              value_type: FLOAT
+              units: dBm
+              params: '10*log10(last(//eltex.entity.optical.rx.power.LowThreshold.mW[{#PORTNAME}]))'
+              description: 'Значение Alarm Threshold(dBm) считается по формуле от данных в milliWatts'
+              tags:
+                -
+                  tag: component
+                  value: 'optical power'
+                -
+                  tag: interface
+                  value: '{#PORTNAME}'
+                -
+                  tag: value
+                  value: threshold
+            -
+              uuid: b5671379ad4f46af86591f3e413e0777
+              name: 'Interface {#PORTNAME} Optical Level Rx Low Threshold mW'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.35265.52.1.1.3.2.1.7.{#SNMPINDEX}.5.1'
+              key: 'eltex.entity.optical.rx.power.LowThreshold.mW[{#PORTNAME}]'
+              delay: 1h
+              history: 7d
+              trends: 30d
+              value_type: FLOAT
+              units: mW
+              description: 'Значение Alarm Threshold(milliWatts) берется с SFP модуля'
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.0001'
+              tags:
+                -
+                  tag: component
+                  value: 'optical power'
+                -
+                  tag: interface
+                  value: '{#PORTNAME}'
+                -
+                  tag: value
+                  value: threshold
+            -
+              uuid: c2028538d72e47049accb88e69b827be
+              name: 'Interface {#PORTNAME} Optical module Rx power'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.35265.52.1.1.3.2.1.8.{#SNMPINDEX}.5.1'
+              key: 'eltex.entity.optical.rx.power[{#PORTNAME}]'
+              value_type: FLOAT
+              units: dBm
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+              tags:
+                -
+                  tag: component
+                  value: 'optical power'
+                -
+                  tag: interface
+                  value: '{#PORTNAME}'
+                -
+                  tag: value
+                  value: current
+            -
+              uuid: a6500e9d255a482bafa2e90c7e362fd4
+              name: 'Interface {#PORTNAME} Optical module Temperature'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.35265.52.1.1.3.2.1.8.{#SNMPINDEX}.1.1'
+              key: 'eltex.entity.optical.temperature[{#PORTNAME}]'
+              delay: 3m
+              status: DISABLED
+              discover: NO_DISCOVER
+              value_type: FLOAT
+              units: °C
+              description: 'eltexPhyTransceiverDiagnosticCurrentValue: "Degrees"'
+              tags:
+                -
+                  tag: component
+                  value: 'optical power'
+                -
+                  tag: interface
+                  value: '{#PORTNAME}'
+                -
+                  tag: value
+                  value: current
+            -
+              uuid: 16466d26e6574a64b2ab795aa9132d66
+              name: 'Interface {#PORTNAME} Optical module Tx power'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.35265.52.1.1.3.2.1.8.{#SNMPINDEX}.4.1'
+              key: 'eltex.entity.optical.tx.power[{#PORTNAME}]'
+              value_type: FLOAT
+              units: dBm
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+              tags:
+                -
+                  tag: component
+                  value: 'optical power'
+                -
+                  tag: interface
+                  value: '{#PORTNAME}'
+                -
+                  tag: value
+                  value: current
+            -
+              uuid: 158166c172b1492e89bf0ea4587b5b8c
+              name: 'Interface {#PORTNAME} Optical module Voltage'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.35265.52.1.1.3.2.1.8.{#SNMPINDEX}.2.1'
+              key: 'eltex.entity.optical.voltage[{#PORTNAME}]'
+              delay: 3m
+              status: DISABLED
+              discover: NO_DISCOVER
+              value_type: FLOAT
+              units: V
+              tags:
+                -
+                  tag: component
+                  value: 'optical power'
+                -
+                  tag: interface
+                  value: '{#PORTNAME}'
+                -
+                  tag: value
+                  value: current
+          trigger_prototypes:
+            -
+              uuid: 23d058464a4d4d3d9df9c0064216c701
+              expression: '("{$OPTICAL.PWR.CONTROL:{#SNMPINDEX}}"="auto" and min(/POLYUS Module Eltex Optical Power SNMP/eltex.entity.optical.rx.power[{#PORTNAME}],#3)>last(/POLYUS Module Eltex Optical Power SNMP/eltex.entity.optical.rx.power.HighThreshold.dbm[{#PORTNAME}])) or ("{$OPTICAL.PWR.CONTROL:{#SNMPINDEX}}"="macro" and max(/POLYUS Module Eltex Optical Power SNMP/eltex.entity.optical.rx.power[{#PORTNAME}],#3)>{$OPTICAL.RX.HIGH.TH:"{#SNMPINDEX}"})'
+              name: 'Interface {#PORTNAME} Optical module Rx High signal'
+              opdata: 'Last: {ITEM.LASTVALUE1}'
+              priority: AVERAGE
+            -
+              uuid: 48ddf1ec4b264a819ae5c88cebad31bd
+              expression: '("{$OPTICAL.PWR.CONTROL:{#SNMPINDEX}}"="auto" and max(/POLYUS Module Eltex Optical Power SNMP/eltex.entity.optical.rx.power[{#PORTNAME}],#3)<last(/POLYUS Module Eltex Optical Power SNMP/eltex.entity.optical.rx.power.LowThreshold.dbm[{#PORTNAME}])) or ("{$OPTICAL.PWR.CONTROL:{#SNMPINDEX}}"="macro" and max(/POLYUS Module Eltex Optical Power SNMP/eltex.entity.optical.rx.power[{#PORTNAME}],#3)<{$OPTICAL.RX.LOW.TH:"{#SNMPINDEX}"})'
+              name: 'Interface {#PORTNAME} Optical module Rx Low signal'
+              opdata: 'Last: {ITEM.LASTVALUE1}'
+              priority: AVERAGE
+        -
+          uuid: af95eaed8c984e85a78b4edb9106996b
+          name: 'Optical Module Discovery for MES23xx MES33xx'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#PORTNAME},1.3.6.1.2.1.31.1.1.1.1, {#TRANSCONTYPE},1.3.6.1.4.1.35265.1.23.53.1.1.1.1]'
+          key: eltex.entity.optical.discovery.89.90
+          delay: 1h
+          filter:
+            evaltype: OR
+            conditions:
+              -
+                macro: '{#TRANSCONTYPE}'
+                value: ^(1|7)$
+                formulaid: A
+          lifetime: 14d
+          description: |
+            MIB: rlphy.mib
+            1.3.6.1.4.1.89.90.1.2.1.3
+          item_prototypes:
+            -
+              uuid: 8a9ee7b8255440fa937768f79796233f
+              name: 'Interface {#PORTNAME} Optical module Rx power'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.89.90.1.2.1.3.{#SNMPINDEX}.9'
+              key: 'eltex.entity.optical.rx.power.89.90[{#PORTNAME}]'
+              value_type: FLOAT
+              units: dBm
+              description: 'Input power on SFP interface.'
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+              tags:
+                -
+                  tag: component
+                  value: 'optical power'
+                -
+                  tag: interface
+                  value: '{#PORTNAME}'
+                -
+                  tag: value
+                  value: current
+              trigger_prototypes:
+                -
+                  uuid: 4c6ae9d003944b7084e5901d4d294233
+                  expression: '("{$OPTICAL.PWR.CONTROL:{#SNMPINDEX}}"="auto" and max(/POLYUS Module Eltex Optical Power SNMP/eltex.entity.optical.rx.power.89.90[{#PORTNAME}],#3)<-13.9) or ("{$OPTICAL.PWR.CONTROL:{#SNMPINDEX}}"="macro" and max(/POLYUS Module Eltex Optical Power SNMP/eltex.entity.optical.rx.power.89.90[{#PORTNAME}],#3)<{$OPTICAL.RX.LOW.TH:"{#SNMPINDEX}"})'
+                  name: 'Interface {#PORTNAME} Optical module Rx Low signal'
+                  opdata: 'Last:{ITEM.LASTVALUE1}'
+                  priority: AVERAGE
+            -
+              uuid: 9044d788851943b78a3c5339409948bc
+              name: 'Interface {#PORTNAME} Optical module Tx power'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.89.90.1.2.1.3.{#SNMPINDEX}.8'
+              key: 'eltex.entity.optical.tx.power.89.90[{#PORTNAME}]'
+              value_type: FLOAT
+              units: dBm
+              preprocessing:
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+              tags:
+                -
+                  tag: component
+                  value: 'optical power'
+                -
+                  tag: interface
+                  value: '{#PORTNAME}'
+                -
+                  tag: value
+                  value: current
+      macros:
+        -
+          macro: '{$OPTICAL.PWR.CONTROL}'
+          value: disabled
+          description: 'disabled - Отключено; auto - включено, порог автоматический с коммутатора; macro - включено, порог в макросах.'
+        -
+          macro: '{$OPTICAL.RX.HIGH.TH}'
+          value: '2'
+        -
+          macro: '{$OPTICAL.RX.LOW.TH}'
+          value: '-13.9'
+      valuemaps:
+        -
+          uuid: 783034be05c641e6a30aae9ec24886ad
+          name: OpticalType
+          mappings:
+            -
+              value: '0'
+              newvalue: unknown
+            -
+              value: '1'
+              newvalue: gbic
+            -
+              value: '2'
+              newvalue: sff
+            -
+              value: '3'
+              newvalue: sfp-sfpplus
+            -
+              value: '4'
+              newvalue: xbi-300-pin
+            -
+              value: '5'
+              newvalue: xenpak
+            -
+              value: '6'
+              newvalue: xfp
+            -
+              value: '7'
+              newvalue: xff
+            -
+              value: '8'
+              newvalue: xfp-e
+            -
+              value: '9'
+              newvalue: xpak
+            -
+              value: '10'
+              newvalue: x2
+            -
+              value: '11'
+              newvalue: dwdm-sfp
+            -
+              value: '12'
+              newvalue: qsfp
+            -
+              value: '13'
+              newvalue: qsfpplus
+            -
+              value: '127'
+              newvalue: reserved
+            -
+              value: '255'
+              newvalue: vendorspec
+        -
+          uuid: 449e1c37c1cc4eb79e5578f389df671a
+          name: TransConnectorType
+          mappings:
+            -
+              value: '0'
+              newvalue: unknown
+            -
+              value: '1'
+              newvalue: sc
+            -
+              value: '2'
+              newvalue: fibre-ch-st1
+            -
+              value: '3'
+              newvalue: fibre-ch-st2
+            -
+              value: '4'
+              newvalue: bnc-tnc
+            -
+              value: '5'
+              newvalue: fibre-ch-coaxial-headers
+            -
+              value: '6'
+              newvalue: fibrejack
+            -
+              value: '7'
+              newvalue: lc
+            -
+              value: '8'
+              newvalue: mt-rj
+            -
+              value: '9'
+              newvalue: mu
+            -
+              value: '10'
+              newvalue: sg
+            -
+              value: '11'
+              newvalue: optical-pigtail
+            -
+              value: '12'
+              newvalue: mpo-parallel-optic
+            -
+              value: '32'
+              newvalue: hssdc-ii
+            -
+              value: '33'
+              newvalue: copper-pigtail
+            -
+              value: '34'
+              newvalue: rj45
+            -
+              value: '35'
+              newvalue: no-separable-connector
+            -
+              value: '127'
+              newvalue: unallocated
+            -
+              value: '255'
+              newvalue: vendorspec
