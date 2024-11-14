@@ -1,0 +1,50 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-11-14T04:09:59Z'
+  groups:
+    -
+      uuid: 846977d1dfed4968bc5f8bdb363285bc
+      name: 'Templates/Operating systems'
+    -
+      uuid: 35ccdb5e0e8842649f9e1fc5ab9316a1
+      name: Templates/Override
+    -
+      uuid: 3d74bac08f304beda49bd71a07e7c843
+      name: Templates/POLYUS/Overrides
+  templates:
+    -
+      uuid: 17048183bb1340eebb478af9ad1061ad
+      template: 'POLYUS Template OS Linux by Zabbix agent - Monitoringit Override'
+      name: 'POLYUS Template OS Linux by Zabbix agent - Monitoringit Override'
+      description: 'Переопределение порогов для наших серверов Мониторинга'
+      templates:
+        -
+          name: 'POLYUS Template OS Linux by Zabbix agent'
+      groups:
+        -
+          name: 'Templates/Operating systems'
+        -
+          name: Templates/Override
+        -
+          name: Templates/POLYUS/Overrides
+      macros:
+        -
+          macro: '{$CPU.UTIL.CRIT}'
+          value: '90'
+          description: 'Порог загрузки ЦПУ в %'
+        -
+          macro: '{$CPU.UTIL.CRIT.TIME.INTERVAL}'
+          value: 5m
+          description: 'Интервал времени, в течение которого должна сохраняться высокая загрузка ЦПУ, для срабатывания триггера'
+        -
+          macro: '{$MEM.UTIL.MAX}'
+          value: '90'
+          description: 'This macro is used as a threshold in memory utilization trigger.'
+        -
+          macro: '{$VFS.FS.FREE.PERCENT.CRIT}'
+          value: '10'
+          description: 'Порог по свободному месту в %. (Макрос с контекстом по разделам)'
+        -
+          macro: '{$VFS.FS.FREE.PERCENT.WARN}'
+          value: '20'
+          description: 'Порог по свободному месту в %. (Макрос с контекстом по разделам)'
