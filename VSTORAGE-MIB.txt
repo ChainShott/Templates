@@ -1,0 +1,707 @@
+VSTORAGE-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, OBJECT-TYPE, NOTIFICATION-TYPE,
+    Counter64, TimeTicks                FROM SNMPv2-SMI
+    netSnmp                             FROM NET-SNMP-MIB
+    TEXTUAL-CONVENTION                  FROM SNMPv2-TC
+;
+
+vStorage MODULE-IDENTITY
+    LAST-UPDATED "201707280000Z"
+    ORGANIZATION "VStorage"
+    CONTACT-INFO ""
+    DESCRIPTION
+    "VStorage MIB objects for cluster statistics"
+    ::= { netSnmp 161 }
+
+--
+-- top level structure
+--
+
+cluster              OBJECT IDENTIFIER ::= { vStorage 1 }
+trapInfoOIDs         OBJECT IDENTIFIER ::= { vStorage 2 }
+trapTypes            OBJECT IDENTIFIER ::= { vStorage 3 }
+
+generalStatistics    OBJECT IDENTIFIER ::= { cluster 1 }
+tables               OBJECT IDENTIFIER ::= { cluster 2 }
+
+-- Cluster information
+
+clusterName OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 1 }
+
+healthStatus OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+    "Cluster health status"
+    ::= { generalStatistics 2 }
+
+
+usedLogicalSpace OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 3 }
+
+
+totalLogicalSpace OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 4 }
+
+
+freeLogicalSpace OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 5 }
+
+
+licenseSpaceUsed OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 6 }
+
+
+licenseStatus OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+    "License status"
+    ::= { generalStatistics 7 }
+
+
+licenseCapacity OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 8 }
+
+
+licenseExpirationStatus OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+    "License status"
+    ::= { generalStatistics 9 }
+
+
+ioReadOpS OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 10 }
+
+
+ioWriteOpS OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 11 }
+
+
+ioReads OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 12 }
+
+
+ioWrites OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 13 }
+
+
+csActive OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 14 }
+
+csTotal OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 15 }
+
+mdsAvail OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 16 }
+
+mdsTotal OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { generalStatistics 17 }
+
+-- Tables
+
+Float32TC ::= TEXTUAL-CONVENTION
+     STATUS       current
+     DESCRIPTION  "This type represents a 32-bit (4-octet) IEEE
+                   floating-point number in binary interchange format."
+     REFERENCE    "IEEE Standard for Floating-Point Arithmetic,
+                   Standard 754-2008"
+     SYNTAX       OCTET STRING (SIZE(4))
+
+
+-- CS Stats
+
+csStatTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF CsStatTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "This table contains CSs metrics"
+    ::= { tables 1 }
+
+csStatTableEntry OBJECT-TYPE
+    SYNTAX      CsStatTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "A row describing a given CS"
+    INDEX   { csAlias }
+    ::= { csStatTable 1 }
+
+CsStatTableEntry ::= SEQUENCE {
+    csAlias      OCTET STRING (SIZE(1..32)),
+    csId         Counter64,
+    csStatus     OCTET STRING,
+    csIoReadOpS  Counter64,
+    csIoWriteOpS Counter64,
+    csIoWait     Float32TC,
+    csIoReadS    Counter64,
+    csIoWriteS   Counter64
+}
+
+csAlias OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE(1..32))
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    ::= { csStatTableEntry 1 }
+
+csId OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { csStatTableEntry 2 }
+
+csStatus OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { csStatTableEntry 3 }
+
+csIoReadOpS OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { csStatTableEntry 4 }
+
+csIoWriteOpS OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { csStatTableEntry 5 }
+
+csIoWait OBJECT-TYPE
+    SYNTAX      Float32TC
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { csStatTableEntry 6 }
+
+csIoReadS OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { csStatTableEntry 7 }
+
+csIoWriteS OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { csStatTableEntry 8 }
+
+-- MDS Stats
+
+mdsStatTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF MdsStatTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "This table contains MDSs metrics"
+    ::= { tables 2 }
+
+mdsStatTableEntry OBJECT-TYPE
+    SYNTAX      MdsStatTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "A row describing a given MDS"
+    INDEX   { mdsAlias }
+    ::= { mdsStatTable 1 }
+
+MdsStatTableEntry ::= SEQUENCE {
+    mdsAlias    OCTET STRING (SIZE(1..32)),
+    mdsId       Counter64,
+    mdsStatus   OCTET STRING,
+    mdsMemUsage Counter64,
+    mdsCpuUsage Float32TC,
+    mdsUpTime   TimeTicks
+}
+
+mdsAlias OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE(1..32))
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    ::= { mdsStatTableEntry 1 }
+
+mdsId OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { mdsStatTableEntry 2 }
+
+mdsStatus OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { mdsStatTableEntry 3 }
+
+mdsMemUsage OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { mdsStatTableEntry 4 }
+
+mdsCpuUsage OBJECT-TYPE
+    SYNTAX      Float32TC
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { mdsStatTableEntry 5 }
+
+mdsUpTime OBJECT-TYPE
+    SYNTAX      TimeTicks
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { mdsStatTableEntry 6 }
+
+
+-- S3 Stats
+
+s3StatTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF S3StatTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "This table contains S3s metrics"
+    ::= { tables 3 }
+
+s3StatTableEntry OBJECT-TYPE
+    SYNTAX      S3StatTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "A row describing a given S3"
+    INDEX   { s3Alias }
+    ::= { s3StatTable 1 }
+
+S3StatTableEntry ::= SEQUENCE {
+    s3Alias      OCTET STRING (SIZE(1..32)),
+    s3Id         Counter64,
+    s3Status     OCTET STRING,
+    s3OsAvail    Counter64,
+    s3OsTotal    Counter64,
+    s3NsAvail    Counter64,
+    s3NsTotal    Counter64,
+    s3GwAvail    Counter64,
+    s3GwTotal    Counter64
+}
+
+s3Alias OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE(1..32))
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    ::= { s3StatTableEntry 1 }
+
+s3Id OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { s3StatTableEntry 2 }
+
+s3Status OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { s3StatTableEntry 3 }
+
+s3OsAvail OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { s3StatTableEntry 4 }
+
+
+s3OsTotal OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { s3StatTableEntry 5 }
+
+
+s3NsAvail OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { s3StatTableEntry 6 }
+
+
+s3NsTotal OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { s3StatTableEntry 7 }
+
+
+s3GwAvail OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { s3StatTableEntry 8 }
+
+
+s3GwTotal OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { s3StatTableEntry 9 }
+
+
+-- iSCSI Targets Stats
+
+iScsiTargetsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF IScsiTargetsStatTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "This table contains iSCSI Targets metrics"
+    ::= { tables 4 }
+
+iScsiTargetsStatTableEntry OBJECT-TYPE
+    SYNTAX      IScsiTargetsStatTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "A row describing a given iSCSI target"
+    INDEX   { iScsiTargetAlias }
+    ::= { iScsiTargetsTable 1 }
+
+IScsiTargetsStatTableEntry ::= SEQUENCE {
+    iScsiTargetAlias            OCTET STRING (SIZE(1..32)),
+    iScsiTargetIqn              OCTET STRING,
+    iScsiTargetHost             OCTET STRING,
+    iScsiTargetState            OCTET STRING,
+    iScsiTargetLunsTotal        Counter64,
+    iScsiTargetLunsOnline       Counter64,
+    iScsiTargetInitiatorsTotal  Counter64,
+    iScsiTargetReconnections    Counter64
+}
+
+iScsiTargetAlias OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE(1..32))
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    ::= { iScsiTargetsStatTableEntry 1 }
+
+iScsiTargetIqn OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiTargetsStatTableEntry 2 }
+
+iScsiTargetHost OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiTargetsStatTableEntry 3 }
+
+iScsiTargetState OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiTargetsStatTableEntry 4 }
+
+iScsiTargetLunsTotal OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiTargetsStatTableEntry 5 }
+
+iScsiTargetLunsOnline OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiTargetsStatTableEntry 6 }
+
+iScsiTargetInitiatorsTotal OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiTargetsStatTableEntry 7 }
+
+iScsiTargetReconnections OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiTargetsStatTableEntry 8 }
+
+-- iSCSI Luns Stats
+
+iScsiLunsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF IScsiLunsStatTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "This table contains iSCSI Luns metrics"
+    ::= { tables 5 }
+
+iScsiLunsStatTableEntry OBJECT-TYPE
+    SYNTAX      IScsiLunsStatTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "A row describing a given iSCSI lun"
+    INDEX   { iScsiTargetAlias }
+    ::= { iScsiLunsTable 1 }
+
+IScsiLunsStatTableEntry ::= SEQUENCE {
+    iScsiLunAlias               OCTET STRING (SIZE(1..32)),
+    iScsiLunTargetIqn           OCTET STRING,
+    iScsiLunLunno               Counter64,
+    iScsiLunIsOnline            OCTET STRING,
+    iScsiLunUsed                Counter64,
+    iScsiLunSize                Counter64,
+    iScsiLunErrs                Counter64,
+    iScsiLunAborted             Counter64,
+    iScsiLunRdDoneCmds          Counter64,
+    iScsiLunRdSubmCmds          Counter64,
+    iScsiLunRdDoneBytes         Counter64,
+    iScsiLunRdSubmBytes         Counter64,
+    iScsiLunWrDoneCmds          Counter64,
+    iScsiLunWrSubmCmds          Counter64,
+    iScsiLunWrDoneBytes         Counter64,
+    iScsiLunWrSubmBytes         Counter64,
+    iScsiLun5mRdAvg             Counter64,
+    iScsiLun5mRdMax             Counter64,
+    iScsiLun5mWrAvg             Counter64,
+    iScsiLun5mWrMax             Counter64,
+    iScsiLunCpuCur              Counter64,
+    iScsiLunCpu15mAvg           Counter64,
+}
+
+iScsiLunAlias OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE(1..32))
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 1 }
+
+iScsiLunTargetIqn OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 2 }
+
+iScsiLunLunno OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 3 }
+
+iScsiLunIsOnline OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 4 }
+
+iScsiLunUsed OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 5 }
+
+iScsiLunSize OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 6 }
+
+iScsiLunErrs OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 7 }
+
+iScsiLunAborted OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 8 }
+
+iScsiLunRdDoneCmds OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 9 }
+
+iScsiLunRdSubmCmds OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 10 }
+
+iScsiLunRdDoneBytes OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 11 }
+
+iScsiLunRdSubmBytes OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 12 }
+
+iScsiLunWrDoneCmds OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 13 }
+
+iScsiLunWrSubmCmds OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 14 }
+
+iScsiLunWrDoneBytes OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 15 }
+
+iScsiLunWrSubmBytes OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 16 }
+
+iScsiLun5mRdAvg OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 17 }
+
+iScsiLun5mRdMax OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 18 }
+
+iScsiLun5mWrAvg OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 19 }
+
+iScsiLun5mWrMax OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 20 }
+
+iScsiLunCpuCur OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 21 }
+
+iScsiLunCpu15mAvg OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { iScsiLunsStatTableEntry 22 }
+
+-- Traps Info OIDs
+
+trapType OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { trapInfoOIDs 1 }
+
+trapMsg OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { trapInfoOIDs 2 }
+
+trapPriority OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    ::= { trapInfoOIDs 3 }
+
+-- Traps
+
+testTrap NOTIFICATION-TYPE
+    STATUS      current
+    DESCRIPTION "Special trap to test purposes"
+    ::= { trapTypes 100 }
+
+generalAlert  NOTIFICATION-TYPE
+    STATUS      current
+    DESCRIPTION "VStorage general alert trap"
+    ::= { trapTypes 1 }
+
+licenseExpired NOTIFICATION-TYPE
+    STATUS      current
+    DESCRIPTION "The Cluster license has expired"
+    ::= { trapTypes 2 }
+
+tooFewClusterFreeLogicalSpace NOTIFICATION-TYPE
+    STATUS      current
+    DESCRIPTION "Too few cluster free logical space"
+    ::= { trapTypes 3 }
+
+tooFewClusterFreePhysicalSpace NOTIFICATION-TYPE
+    STATUS      current
+    DESCRIPTION "Too few cluster free physical space"
+    ::= { trapTypes 4 }
+
+tooFewMdses NOTIFICATION-TYPE
+    STATUS      current
+    DESCRIPTION "Too few mdses"
+    ::= { trapTypes 5 }
+
+tooFewNodes NOTIFICATION-TYPE
+    STATUS      current
+    DESCRIPTION "Too few nodes"
+    ::= { trapTypes 6 }
+
+END
