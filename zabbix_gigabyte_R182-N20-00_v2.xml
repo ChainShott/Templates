@@ -1,0 +1,3775 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2023-11-08T10:19:38Z</date>
+    <groups>
+        <group>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>GIGABYTE MegaRAC SP-X R182-N20-00</template>
+            <name>GIGABYTE MegaRAC SP-X R182-N20-00</name>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>CPU</name>
+                </application>
+                <application>
+                    <name>Drive</name>
+                </application>
+                <application>
+                    <name>Fan</name>
+                </application>
+                <application>
+                    <name>Memory</name>
+                </application>
+                <application>
+                    <name>Power</name>
+                </application>
+                <application>
+                    <name>System</name>
+                </application>
+                <application>
+                    <name>Temp</name>
+                </application>
+                <application>
+                    <name>Voltage</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>BPB_FAN_1A</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_1A</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_1A</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_1A on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_1A on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_1A on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_1A.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_1B</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_1B</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_1B</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_1B on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_1B on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_1B on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_1B.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_2A</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_2A</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_2A</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_2A on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_2A on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_2A on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_2A.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_2B</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_2B</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_2B</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_2B on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_2B on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_2B on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_2B.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_3A</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_3A</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_3A</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_3A on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_3A on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_3A on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_3A.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_3B</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_3B</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_3B</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_3B on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_3B on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_3B on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_3B.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_4A</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_4A</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_4A</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_4A on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_4A on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_4A on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_4A.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_4B</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_4B</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_4B</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_4B on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_4B on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_4B on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_4B.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_5A</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_5A</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_5A</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_5A on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_5A on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_5A on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_5A.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_5B</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_5B</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_5B</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_5B on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_5B on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_5B on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_5B.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_6A</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_6A</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_6A</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_6A on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_6A on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_6A on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_6A.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_6B</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_6B</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_6B</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_6B on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_6B on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_6B on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_6B.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_7A</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_7A</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_7A</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_7A on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_7A on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_7A on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_7A.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_7B</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_7B</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_7B</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_7B on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_7B on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_7B on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_7B.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_8A</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_8A</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_8A</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_8A on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_8A on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_8A on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_8A.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>BPB_FAN_8B</name>
+                    <type>IPMI</type>
+                    <key>BPB_FAN_8B</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <units>RPM</units>
+                    <ipmi_sensor>BPB_FAN_8B</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Fan</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;1200</expression>
+                            <name>High BPB_FAN_8B on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1500</expression>
+                            <name>Warning BPB_FAN_8B on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High BPB_FAN_8B on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:BPB_FAN_8B.last()}&lt;1200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>CPU0_DTS</name>
+                    <type>IPMI</type>
+                    <key>CPU0_DTS</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>CPU0_DTS</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>CPU</name>
+                        </application>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>CPU0_MEMTRIP</name>
+                    <type>IPMI</type>
+                    <key>CPU0_MEMTRIP</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <ipmi_sensor>CPU0_MEMTRIP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>CPU</name>
+                        </application>
+                        <application>
+                            <name>System</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>IPMI Processor</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;&gt;128&#13;
+and&#13;
+{last()}&gt;0</expression>
+                            <name>CPU0_MEMTRIP not OK on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>CPU0_Status</name>
+                    <type>IPMI</type>
+                    <key>CPU0_Status</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <ipmi_sensor>CPU0_Status</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>CPU</name>
+                        </application>
+                        <application>
+                            <name>System</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>IPMI Processor</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;&gt;128</expression>
+                            <name>CPU0_Status not OK on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>CPU0_TEMP</name>
+                    <type>IPMI</type>
+                    <key>CPU0_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>CPU0_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>CPU</name>
+                        </application>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;97</expression>
+                            <name>High CPU0 Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;96</expression>
+                            <name>Warning CPU0 Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High CPU0 Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:CPU0_TEMP.last()}&gt;97</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>CPU1_DTS</name>
+                    <type>IPMI</type>
+                    <key>CPU1_DTS</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>CPU1_DTS</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>CPU</name>
+                        </application>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>CPU1_MEMTRIP</name>
+                    <type>IPMI</type>
+                    <key>CPU1_MEMTRIP</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <ipmi_sensor>CPU1_MEMTRIP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>CPU</name>
+                        </application>
+                        <application>
+                            <name>System</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>IPMI Processor</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;&gt;128&#13;
+and &#13;
+{last()}&gt;0</expression>
+                            <name>CPU1_MEMTRIP not OK on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>CPU1_Status</name>
+                    <type>IPMI</type>
+                    <key>CPU1_Status</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <ipmi_sensor>CPU1_Status</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>CPU</name>
+                        </application>
+                        <application>
+                            <name>System</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>IPMI Processor</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;&gt;128</expression>
+                            <name>CPU1_Status not OK on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>CPU1_TEMP</name>
+                    <type>IPMI</type>
+                    <key>CPU1_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>CPU1_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>CPU</name>
+                        </application>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;97</expression>
+                            <name>High CPU1 Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;96</expression>
+                            <name>Warning CPU1 Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High CPU1 Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:CPU1_TEMP.last()}&gt;97</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DIMMG0_TEMP</name>
+                    <type>IPMI</type>
+                    <key>DIMMG0_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>DIMMG0_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Memory</name>
+                        </application>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;83</expression>
+                            <name>High DIMMG0 Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;81</expression>
+                            <name>Warning DIMMG0 Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High DIMMG0 Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:DIMMG0_TEMP.last()}&gt;83</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DIMMG1_TEMP</name>
+                    <type>IPMI</type>
+                    <key>DIMMG1_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>DIMMG1_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Memory</name>
+                        </application>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;83</expression>
+                            <name>High DIMMG1 Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;81</expression>
+                            <name>Warning DIMMG1 Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High DIMMG1 Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:DIMMG1_TEMP.last()}&gt;83</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DIMMG2_TEMP</name>
+                    <type>IPMI</type>
+                    <key>DIMMG2_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>DIMMG2_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Memory</name>
+                        </application>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;83</expression>
+                            <name>High DIMMG2 Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;81</expression>
+                            <name>Warning DIMMG2 Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High DIMMG2 Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:DIMMG2_TEMP.last()}&gt;83</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DIMMG3_TEMP</name>
+                    <type>IPMI</type>
+                    <key>DIMMG3_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>DIMMG3_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Memory</name>
+                        </application>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;83</expression>
+                            <name>High DIMMG3 Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;81</expression>
+                            <name>Warning DIMMG3 Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High DIMMG3 Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:DIMMG3_TEMP.last()}&gt;83</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>HDD_TEMP_0</name>
+                    <type>IPMI</type>
+                    <key>HDD_TEMP_0</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>HDD_TEMP_0</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Drive</name>
+                        </application>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;60</expression>
+                            <name>High HDD Temp 0 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;55</expression>
+                            <name>Warning HDD Temp 0 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High HDD Temp 0 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:HDD_TEMP_0.last()}&gt;60</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>HDD_TEMP_1</name>
+                    <type>IPMI</type>
+                    <key>HDD_TEMP_1</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>HDD_TEMP_1</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Drive</name>
+                        </application>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;60</expression>
+                            <name>High HDD Temp 1 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;55</expression>
+                            <name>Warning HDD Temp 1 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High HDD Temp 1 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:HDD_TEMP_1.last()}&gt;60</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>INLET_AIR_TEMP</name>
+                    <type>IPMI</type>
+                    <key>INLET_AIR_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>INLET_AIR_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;60</expression>
+                            <name>High Inlet Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;57</expression>
+                            <name>Warning Inlet Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High Inlet Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:INLET_AIR_TEMP.last()}&gt;60</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>MB_TEMP1</name>
+                    <type>IPMI</type>
+                    <key>MB_TEMP1</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>MB_TEMP1</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;90</expression>
+                            <name>High MB Temp 1 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;85</expression>
+                            <name>Warning MB Temp 1 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High MB Temp 1 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:MB_TEMP1.last()}&gt;90</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>MB_TEMP2</name>
+                    <type>IPMI</type>
+                    <key>MB_TEMP2</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>MB_TEMP2</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;90</expression>
+                            <name>High MB Temp 2 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;85</expression>
+                            <name>Warning MB Temp 2 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High MB Temp 2 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:MB_TEMP2.last()}&gt;90</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>NVMeG0_TEMP</name>
+                    <type>IPMI</type>
+                    <key>NVMeG0_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>NVMeG0_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;82</expression>
+                            <name>High NVMeG0 Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;75</expression>
+                            <name>Warning NVMeG0 Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High NVMeG0 Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:NVMeG0_TEMP.last()}&gt;82</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>OCP20_TEMP</name>
+                    <type>IPMI</type>
+                    <key>OCP20_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>OCP20_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;105</expression>
+                            <name>High OCP20 Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;100</expression>
+                            <name>Warning OCP20 Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High OCP20 Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:OCP20_TEMP.last()}&gt;105</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>OCP30_TEMP</name>
+                    <type>IPMI</type>
+                    <key>OCP30_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>OCP30_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;105</expression>
+                            <name>High OCP30 Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;100</expression>
+                            <name>Warning OCP30 Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High OCP30 Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:OCP30_TEMP.last()}&gt;105</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>PCH_TEMP</name>
+                    <type>IPMI</type>
+                    <key>PCH_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>PCH_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;88</expression>
+                            <name>High PCH Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;84</expression>
+                            <name>Warning PCH Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High PCH Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:PCH_TEMP.last()}&gt;88</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>PCIE_TEMP_1</name>
+                    <type>IPMI</type>
+                    <key>PCIE_TEMP_1</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>PCIE_TEMP_1</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;105</expression>
+                            <name>High PCIE Temp 1 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;100</expression>
+                            <name>Warning PCIE Temp 1 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High PCIE Temp 1 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:PCIE_TEMP_1.last()}&gt;105</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>PCIE_TEMP_2</name>
+                    <type>IPMI</type>
+                    <key>PCIE_TEMP_2</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>PCIE_TEMP_2</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;105</expression>
+                            <name>High PCIE Temp 2 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;100</expression>
+                            <name>Warning PCIE Temp 2 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High PCIE Temp 2 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:PCIE_TEMP_2.last()}&gt;105</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>PS1_Status</name>
+                    <type>IPMI</type>
+                    <key>PS1_Status</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <ipmi_sensor>PS1_Status</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Power</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>IPMI Power Supply</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1</expression>
+                            <name>PS1_Status not OK on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>PS2_Status</name>
+                    <type>IPMI</type>
+                    <key>PS2_Status</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <ipmi_sensor>PS2_Status</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Power</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>IPMI Power Supply</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1</expression>
+                            <name>PS2_Status not OK on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>PSU1_HOTSPOT</name>
+                    <type>IPMI</type>
+                    <key>PSU1_HOTSPOT</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>PSU1_HOTSPOT</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Power</name>
+                        </application>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;95</expression>
+                            <name>High PSU1_HOTSPOT Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;90</expression>
+                            <name>Warning PSU1_HOTSPOT Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High PSU1_HOTSPOT Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:PSU1_HOTSPOT.last()}&gt;95</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>PSU2_HOTSPOT</name>
+                    <type>IPMI</type>
+                    <key>PSU2_HOTSPOT</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>PSU2_HOTSPOT</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Power</name>
+                        </application>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;95</expression>
+                            <name>High PSU2_HOTSPOT Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;90</expression>
+                            <name>Warning PSU2_HOTSPOT Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High PSU2_HOTSPOT Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:PSU2_HOTSPOT.last()}&gt;95</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_1V0_LAN_AUX</name>
+                    <type>IPMI</type>
+                    <key>P_1V0_LAN_AUX</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_1V0_LAN_AUX</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1.150</expression>
+                            <name>High P_1V0_LAN_AUX on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;0.850</expression>
+                            <name>Low P_1V0_LAN_AUX on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;0.900</expression>
+                            <name>Warning low P_1V0_LAN_AUX on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_1V0_LAN_AUX on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_1V0_LAN_AUX.last()}&lt;0.850</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;1.100</expression>
+                            <name>Warning P_1V0_LAN_AUX on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_1V0_LAN_AUX on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_1V0_LAN_AUX.last()}&gt;1.150</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_1V05_PCH</name>
+                    <type>IPMI</type>
+                    <key>P_1V05_PCH</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_1V05_PCH</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1.200</expression>
+                            <name>High P_1V05_PCH on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;0.890</expression>
+                            <name>Low P_1V05_PCH on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;0.950</expression>
+                            <name>Warning low P_1V05_PCH on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_1V05_PCH on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_1V05_PCH.last()}&lt;0.890</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;1.150</expression>
+                            <name>Warning P_1V05_PCH on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_1V05_PCH on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_1V05_PCH.last()}&gt;1.200</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_1V8_PCH_AUX</name>
+                    <type>IPMI</type>
+                    <key>P_1V8_PCH_AUX</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_1V8_PCH_AUX</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;2.068</expression>
+                            <name>High P_1V8_PCH_AUX on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.529</expression>
+                            <name>Low P_1V8_PCH_AUX on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.617</expression>
+                            <name>Warning low P_1V8_PCH_AUX on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_1V8_PCH_AUX on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_1V8_PCH_AUX.last()}&lt;1.529</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;1.980</expression>
+                            <name>Warning P_1V8_PCH_AUX on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_1V8_PCH_AUX on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_1V8_PCH_AUX.last()}&gt;2.068</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_3V3_2600</name>
+                    <type>IPMI</type>
+                    <key>P_3V3_2600</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_3V3_2600</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;3.802</expression>
+                            <name>High P_3V3_2600 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;2.803</expression>
+                            <name>Low P_3V3_2600 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;2.960</expression>
+                            <name>Warning low P_3V3_2600 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_3V3_2600 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_3V3_2600.last()}&lt;2.803</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;3.626</expression>
+                            <name>Warning P_3V3_2600 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_3V3_2600 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_3V3_2600.last()}&gt;3.802</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_5V_2600</name>
+                    <type>IPMI</type>
+                    <key>P_5V_2600</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_5V_2600</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;5.775</expression>
+                            <name>High P_5V_2600 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;4.235</expression>
+                            <name>Low P_5V_2600 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;4.510</expression>
+                            <name>Warning low P_5V_2600 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_5V_2600 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_5V_2600.last()}&lt;4.235</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;5.500</expression>
+                            <name>Warning P_5V_2600 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_5V_2600 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_5V_2600.last()}&gt;5.775</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_5V_STBY</name>
+                    <type>IPMI</type>
+                    <key>P_5V_STBY</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_5V_STBY</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;5.775</expression>
+                            <name>High P_5V_STBY on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;4.235</expression>
+                            <name>Low P_5V_STBY on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;4.510</expression>
+                            <name>Warning low P_5V_STBY on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_5V_STBY on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_5V_STBY.last()}&lt;4.235</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;5.500</expression>
+                            <name>Warning P_5V_STBY on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_5V_STBY on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_5V_STBY.last()}&gt;5.775</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_12V_2600</name>
+                    <type>IPMI</type>
+                    <key>P_12V_2600</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_12V_2600</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;13.845</expression>
+                            <name>High P_12V_2600 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;10.205</expression>
+                            <name>Low P_12V_2600 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;10.790</expression>
+                            <name>Warning low P_12V_2600 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_12V_2600 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_12V_2600.last()}&lt;10.205</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;13.195</expression>
+                            <name>Warning P_12V_2600 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_12V_2600 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_12V_2600.last()}&gt;13.845</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_VBAT_2600</name>
+                    <type>IPMI</type>
+                    <key>P_VBAT_2600</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_VBAT_2600</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;2.549</expression>
+                            <name>Low P_VBAT_2600 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;2.725</expression>
+                            <name>Warning low P_VBAT_2600 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_VBAT_2600 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VBAT_2600.last()}&lt;2.549</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_VCCIN_CPU0</name>
+                    <type>IPMI</type>
+                    <key>P_VCCIN_CPU0</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_VCCIN_CPU0</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;2.300</expression>
+                            <name>High P_VCCIN_CPU0 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.120</expression>
+                            <name>Low P_VCCIN_CPU0 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.200</expression>
+                            <name>Warning low P_VCCIN_CPU0 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_VCCIN_CPU0 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VCCIN_CPU0.last()}&lt;1.120</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;2.200</expression>
+                            <name>Warning P_VCCIN_CPU0 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_VCCIN_CPU0 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VCCIN_CPU0.last()}&gt;2.300</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_VCCIN_CPU1</name>
+                    <type>IPMI</type>
+                    <key>P_VCCIN_CPU1</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_VCCIN_CPU1</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;2.300</expression>
+                            <name>High P_VCCIN_CPU1 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.120</expression>
+                            <name>Low P_VCCIN_CPU1 on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.200</expression>
+                            <name>Warning low P_VCCIN_CPU1 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_VCCIN_CPU1 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VCCIN_CPU1.last()}&lt;1.120</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;2.200</expression>
+                            <name>Warning P_VCCIN_CPU1 on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_VCCIN_CPU1 on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VCCIN_CPU1.last()}&gt;2.300</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_VDDQ_P0_ABCD</name>
+                    <type>IPMI</type>
+                    <key>P_VDDQ_P0_ABCD</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_VDDQ_P0_ABCD</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1.617</expression>
+                            <name>High P_VDDQ_P0_ABCD on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.019</expression>
+                            <name>Low P_VDDQ_P0_ABCD on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.078</expression>
+                            <name>Warning low P_VDDQ_P0_ABCD on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_VDDQ_P0_ABCD on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VDDQ_P0_ABCD.last()}&lt;1.019</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;1.548</expression>
+                            <name>Warning P_VDDQ_P0_ABCD on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_VDDQ_P0_ABCD on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VDDQ_P0_ABCD.last()}&gt;1.617</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_VDDQ_P0_EFGH</name>
+                    <type>IPMI</type>
+                    <key>P_VDDQ_P0_EFGH</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_VDDQ_P0_EFGH</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1.617</expression>
+                            <name>High P_VDDQ_P0_EFGH on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.019</expression>
+                            <name>Low P_VDDQ_P0_EFGH on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.078</expression>
+                            <name>Warning low P_VDDQ_P0_EFGH on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_VDDQ_P0_EFGH on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VDDQ_P0_EFGH.last()}&lt;1.019</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;1.548</expression>
+                            <name>Warning P_VDDQ_P0_EFGH on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_VDDQ_P0_EFGH on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VDDQ_P0_EFGH.last()}&gt;1.617</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_VDDQ_P1_IJKL</name>
+                    <type>IPMI</type>
+                    <key>P_VDDQ_P1_IJKL</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_VDDQ_P1_IJKL</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1.617</expression>
+                            <name>High P_VDDQ_P1_IJKL on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.019</expression>
+                            <name>Low P_VDDQ_P1_IJKL on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.078</expression>
+                            <name>Warning low P_VDDQ_P1_IJKL on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_VDDQ_P1_IJKL on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VDDQ_P1_IJKL.last()}&lt;1.019</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;1.548</expression>
+                            <name>Warning P_VDDQ_P1_IJKL on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_VDDQ_P1_IJKL on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VDDQ_P1_IJKL.last()}&gt;1.617</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_VDDQ_P1_MNOP</name>
+                    <type>IPMI</type>
+                    <key>P_VDDQ_P1_MNOP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_VDDQ_P1_MNOP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1.617</expression>
+                            <name>High P_VDDQ_P1_MNOP on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.019</expression>
+                            <name>Low P_VDDQ_P1_MNOP on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.078</expression>
+                            <name>Warning low P_VDDQ_P1_MNOP on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_VDDQ_P1_MNOP on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VDDQ_P1_MNOP.last()}&lt;1.019</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;1.548</expression>
+                            <name>Warning P_VDDQ_P1_MNOP on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_VDDQ_P1_MNOP on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VDDQ_P1_MNOP.last()}&gt;1.617</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>P_VNN_PCH_AUX</name>
+                    <type>IPMI</type>
+                    <key>P_VNN_PCH_AUX</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>P_VNN_PCH_AUX</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1.150</expression>
+                            <name>High P_VNN_PCH_AUX on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;0.720</expression>
+                            <name>Low P_VNN_PCH_AUX on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;0.770</expression>
+                            <name>Warning low P_VNN_PCH_AUX on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low P_VNN_PCH_AUX on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VNN_PCH_AUX.last()}&lt;0.720</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;1.100</expression>
+                            <name>Warning P_VNN_PCH_AUX on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High P_VNN_PCH_AUX on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:P_VNN_PCH_AUX.last()}&gt;1.150</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>RISER1_TEMP</name>
+                    <type>IPMI</type>
+                    <key>RISER1_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>RISER1_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;99.000</expression>
+                            <name>High RISER1 Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;96.000</expression>
+                            <name>Warning RISER1 Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High RISER1 Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:RISER1_TEMP.last()}&gt;99.000</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>RISER2_TEMP</name>
+                    <type>IPMI</type>
+                    <key>RISER2_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>RISER2_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;99.000</expression>
+                            <name>High RISER2 Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;96.000</expression>
+                            <name>Warning RISER2 Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High RISER2 Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:RISER2_TEMP.last()}&gt;99.000</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>SEL</name>
+                    <type>IPMI</type>
+                    <key>SEL</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <ipmi_sensor>SEL</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>System</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>IPMI Event Logging Disabled</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata({$GIGABYTE_NODATA_PERIOD})}=1</expression>
+                            <name>System Health not OK on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>SYS_POWER</name>
+                    <type>IPMI</type>
+                    <key>SYS_POWER</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Watts</units>
+                    <ipmi_sensor>SYS_POWER</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Power</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata({$GIGABYTE_NODATA_PERIOD})}=1</expression>
+                            <name>Power Out on {HOSTNAME} (HW)</name>
+                            <priority>HIGH</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>System Health not OK on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:SEL.nodata({$GIGABYTE_NODATA_PERIOD})}=1</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_1V8_P0_TEMP</name>
+                    <type>IPMI</type>
+                    <key>VR_1V8_P0_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>VR_1V8_P0_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;120.000</expression>
+                            <name>High VR_1V8_P0_TEMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;115.000</expression>
+                            <name>Warning VR_1V8_P0_TEMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_1V8_P0_TEMP Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_1V8_P0_TEMP.last()}&gt;120.000</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_1V8_P1_TEMP</name>
+                    <type>IPMI</type>
+                    <key>VR_1V8_P1_TEMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>VR_1V8_P1_TEMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;120.000</expression>
+                            <name>High VR_1V8_P1_TEMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;115.000</expression>
+                            <name>Warning VR_1V8_P1_TEMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_1V8_P1_TEMP Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_1V8_P1_TEMP.last()}&gt;120.000</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_DIMMG0_TMP</name>
+                    <type>IPMI</type>
+                    <key>VR_DIMMG0_TMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>VR_DIMMG0_TMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;120.000</expression>
+                            <name>High VR_DIMMG0_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;115.000</expression>
+                            <name>Warning VR_DIMMG0_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_DIMMG0_TMP Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_DIMMG0_TMP.last()}&gt;120.000</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_DIMMG1_TMP</name>
+                    <type>IPMI</type>
+                    <key>VR_DIMMG1_TMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>VR_DIMMG1_TMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;120.000</expression>
+                            <name>High VR_DIMMG1_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;115.000</expression>
+                            <name>Warning VR_DIMMG1_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_DIMMG1_TMP Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_DIMMG1_TMP.last()}&gt;120.000</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_DIMMG2_TMP</name>
+                    <type>IPMI</type>
+                    <key>VR_DIMMG2_TMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>VR_DIMMG2_TMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;120.000</expression>
+                            <name>High VR_DIMMG2_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;115.000</expression>
+                            <name>Warning VR_DIMMG2_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_DIMMG2_TMP Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_DIMMG2_TMP.last()}&gt;120.000</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_DIMMG3_TMP</name>
+                    <type>IPMI</type>
+                    <key>VR_DIMMG3_TMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>VR_DIMMG3_TMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;120.000</expression>
+                            <name>High VR_DIMMG3_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;115.000</expression>
+                            <name>Warning VR_DIMMG3_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_DIMMG3_TMP Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_DIMMG3_TMP.last()}&gt;120.000</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_VCCIN_P0_TMP</name>
+                    <type>IPMI</type>
+                    <key>VR_VCCIN_P0_TMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>VR_VCCIN_P0_TMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;120.000</expression>
+                            <name>High VR_VCCIN_P0_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;115.000</expression>
+                            <name>Warning VR_VCCIN_P0_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_VCCIN_P0_TMP Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VCCIN_P0_TMP.last()}&gt;120.000</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_VCCIN_P1_TMP</name>
+                    <type>IPMI</type>
+                    <key>VR_VCCIN_P1_TMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>VR_VCCIN_P1_TMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;120.000</expression>
+                            <name>High VR_VCCIN_P1_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;115.000</expression>
+                            <name>Warning VR_VCCIN_P1_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_VCCIN_P1_TMP Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VCCIN_P1_TMP.last()}&gt;120.000</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_VCCIO_P0_TMP</name>
+                    <type>IPMI</type>
+                    <key>VR_VCCIO_P0_TMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>VR_VCCIO_P0_TMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;120.000</expression>
+                            <name>High VR_VCCIO_P0_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;115.000</expression>
+                            <name>Warning VR_VCCIO_P0_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_VCCIO_P0_TMP Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VCCIO_P0_TMP.last()}&gt;120.000</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_VCCIO_P1_TMP</name>
+                    <type>IPMI</type>
+                    <key>VR_VCCIO_P1_TMP</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <ipmi_sensor>VR_VCCIO_P1_TMP</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Temp</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;120.000</expression>
+                            <name>High VR_VCCIO_P1_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;115.000</expression>
+                            <name>Warning VR_VCCIO_P1_TMP Temp on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_VCCIO_P1_TMP Temp on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VCCIO_P1_TMP.last()}&gt;120.000</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_VDDQ_G0_VO</name>
+                    <type>IPMI</type>
+                    <key>VR_VDDQ_G0_VO</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>VR_VDDQ_G0_VO</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1.610</expression>
+                            <name>High VR_VDDQ_G0_VO on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.020</expression>
+                            <name>Low VR_VDDQ_G0_VO on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.080</expression>
+                            <name>Warning low VR_VDDQ_G0_VO on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low VR_VDDQ_G0_VO on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VDDQ_G0_VO.last()}&lt;1.020</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;1.540</expression>
+                            <name>Warning VR_VDDQ_G0_VO on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_VDDQ_G0_VO on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VDDQ_G0_VO.last()}&gt;1.610</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_VDDQ_G1_VO</name>
+                    <type>IPMI</type>
+                    <key>VR_VDDQ_G1_VO</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>VR_VDDQ_G1_VO</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1.610</expression>
+                            <name>High VR_VDDQ_G1_VO on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.020</expression>
+                            <name>Low VR_VDDQ_G1_VO on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.080</expression>
+                            <name>Warning low VR_VDDQ_G1_VO on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low VR_VDDQ_G1_VO on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VDDQ_G1_VO.last()}&lt;1.020</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;1.540</expression>
+                            <name>Warning VR_VDDQ_G1_VO on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_VDDQ_G1_VO on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VDDQ_G1_VO.last()}&gt;1.610</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_VDDQ_G2_VO</name>
+                    <type>IPMI</type>
+                    <key>VR_VDDQ_G2_VO</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>VR_VDDQ_G2_VO</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1.610</expression>
+                            <name>High VR_VDDQ_G2_VO on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.020</expression>
+                            <name>Low VR_VDDQ_G2_VO on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.080</expression>
+                            <name>Warning low VR_VDDQ_G2_VO on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low VR_VDDQ_G2_VO on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VDDQ_G2_VO.last()}&lt;1.020</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;1.540</expression>
+                            <name>Warning VR_VDDQ_G2_VO on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_VDDQ_G2_VO on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VDDQ_G2_VO.last()}&gt;1.610</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_VDDQ_G3_VO</name>
+                    <type>IPMI</type>
+                    <key>VR_VDDQ_G3_VO</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>VR_VDDQ_G3_VO</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1.610</expression>
+                            <name>High VR_VDDQ_G3_VO on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.020</expression>
+                            <name>Low VR_VDDQ_G3_VO on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;1.080</expression>
+                            <name>Warning low VR_VDDQ_G3_VO on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low VR_VDDQ_G3_VO on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VDDQ_G3_VO.last()}&lt;1.020</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;1.540</expression>
+                            <name>Warning VR_VDDQ_G3_VO on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_VDDQ_G3_VO on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VDDQ_G3_VO.last()}&gt;1.610</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_VPP_G1_VO</name>
+                    <type>IPMI</type>
+                    <key>VR_VPP_G1_VO</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>VR_VPP_G1_VO</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;2.900</expression>
+                            <name>High VR_VPP_G1_VO on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;2.100</expression>
+                            <name>Low VR_VPP_G1_VO on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;2.300</expression>
+                            <name>Warning low VR_VPP_G1_VO on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low VR_VPP_G1_VO on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VPP_G1_VO.last()}&lt;2.100</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;2.800</expression>
+                            <name>Warning VR_VPP_G1_VO on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_VPP_G1_VO on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VPP_G1_VO.last()}&gt;2.900</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>VR_VPP_G3_VO</name>
+                    <type>IPMI</type>
+                    <key>VR_VPP_G3_VO</key>
+                    <delay>{$GIGABYTE_HOT_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Volts</units>
+                    <ipmi_sensor>VR_VPP_G3_VO</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>Voltage</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;2.900</expression>
+                            <name>High VR_VPP_G3_VO on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;2.100</expression>
+                            <name>Low VR_VPP_G3_VO on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;2.300</expression>
+                            <name>Warning low VR_VPP_G3_VO on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Low VR_VPP_G3_VO on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VPP_G3_VO.last()}&lt;2.100</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;2.800</expression>
+                            <name>Warning VR_VPP_G3_VO on {HOSTNAME} (HW)</name>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>High VR_VPP_G3_VO on {HOSTNAME} (HW)</name>
+                                    <expression>{GIGABYTE MegaRAC SP-X R182-N20-00:VR_VPP_G3_VO.last()}&gt;2.900</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Watchdog</name>
+                    <type>IPMI</type>
+                    <key>Watchdog</key>
+                    <delay>{$GIGABYTE_REQUEST_PERIOD}</delay>
+                    <history>{$GIGABYTE_HISTORY_PERIOD}</history>
+                    <trends>{$GIGABYTE_TREND_PERIOD}</trends>
+                    <ipmi_sensor>Watchdog</ipmi_sensor>
+                    <applications>
+                        <application>
+                            <name>System</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>IPMI Watchdog 2</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;0</expression>
+                            <name>Watchdog not OK on {HOSTNAME} (HW)</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <macros>
+                <macro>
+                    <macro>{$GIGABYTE_HISTORY_PERIOD}</macro>
+                    <value>30d</value>
+                </macro>
+                <macro>
+                    <macro>{$GIGABYTE_HOT_PERIOD}</macro>
+                    <value>300</value>
+                </macro>
+                <macro>
+                    <macro>{$GIGABYTE_NODATA_PERIOD}</macro>
+                    <value>1800</value>
+                </macro>
+                <macro>
+                    <macro>{$GIGABYTE_REQUEST_PERIOD}</macro>
+                    <value>600</value>
+                </macro>
+                <macro>
+                    <macro>{$GIGABYTE_TREND_PERIOD}</macro>
+                    <value>180d</value>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+    <graphs>
+        <graph>
+            <name>CPU Temp</name>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>CPU0_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>CPU1_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <color>2774A4</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>CPU0_DTS</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>4</sortorder>
+                    <color>A54F10</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>CPU1_DTS</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Fan</name>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_1A</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_1B</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <color>2774A4</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_2A</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>4</sortorder>
+                    <color>A54F10</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_2B</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>5</sortorder>
+                    <color>FC6EA3</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_3A</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>6</sortorder>
+                    <color>6C59DC</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_3B</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>7</sortorder>
+                    <color>AC8C14</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_4A</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>8</sortorder>
+                    <color>611F27</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_4B</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>9</sortorder>
+                    <color>F230E0</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_5A</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>10</sortorder>
+                    <color>5CCD18</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_5B</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>11</sortorder>
+                    <color>BB2A02</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_6A</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>12</sortorder>
+                    <color>5A2B57</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_6B</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>13</sortorder>
+                    <color>89ABF8</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_7A</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>14</sortorder>
+                    <color>7EC25C</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_7B</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>15</sortorder>
+                    <color>274482</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_8A</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>16</sortorder>
+                    <color>2B5429</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>BPB_FAN_8B</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Memory Temp</name>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>DIMMG0_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>DIMMG1_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <color>2774A4</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>DIMMG2_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>4</sortorder>
+                    <color>A54F10</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>DIMMG3_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>5</sortorder>
+                    <color>FC6EA3</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_DIMMG0_TMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>6</sortorder>
+                    <color>6C59DC</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_DIMMG1_TMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>7</sortorder>
+                    <color>AC8C14</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_DIMMG2_TMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>8</sortorder>
+                    <color>611F27</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_DIMMG3_TMP</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Power</name>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>SYS_POWER</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>PSU Temp</name>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>PSU1_HOTSPOT</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>PSU2_HOTSPOT</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Sys Temp</name>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>HDD_TEMP_0</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>HDD_TEMP_1</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <color>2774A4</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>INLET_AIR_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>4</sortorder>
+                    <color>A54F10</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>MB_TEMP1</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>5</sortorder>
+                    <color>FC6EA3</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>MB_TEMP2</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>6</sortorder>
+                    <color>6C59DC</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>NVMeG0_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>7</sortorder>
+                    <color>AC8C14</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>OCP20_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>8</sortorder>
+                    <color>611F27</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>OCP30_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>9</sortorder>
+                    <color>F230E0</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>PCH_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>10</sortorder>
+                    <color>5CCD18</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>PCIE_TEMP_1</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>11</sortorder>
+                    <color>BB2A02</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>PCIE_TEMP_2</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>12</sortorder>
+                    <color>5A2B57</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>RISER1_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>13</sortorder>
+                    <color>89ABF8</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>RISER2_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>14</sortorder>
+                    <color>7EC25C</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_1V8_P0_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>15</sortorder>
+                    <color>274482</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_1V8_P1_TEMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>16</sortorder>
+                    <color>2B5429</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_VCCIN_P0_TMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>17</sortorder>
+                    <color>8048B4</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_VCCIN_P1_TMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>18</sortorder>
+                    <color>FD5434</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_VCCIO_P0_TMP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>19</sortorder>
+                    <color>790E1F</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_VCCIO_P1_TMP</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Voltage</name>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_1V0_LAN_AUX</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_1V05_PCH</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <color>2774A4</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_1V8_PCH_AUX</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>4</sortorder>
+                    <color>A54F10</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_3V3_2600</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>5</sortorder>
+                    <color>FC6EA3</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_5V_2600</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>6</sortorder>
+                    <color>6C59DC</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_5V_STBY</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>7</sortorder>
+                    <color>AC8C14</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_12V_2600</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>8</sortorder>
+                    <color>611F27</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_VBAT_2600</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>9</sortorder>
+                    <color>F230E0</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_VCCIN_CPU0</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>10</sortorder>
+                    <color>5CCD18</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_VCCIN_CPU1</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>11</sortorder>
+                    <color>BB2A02</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_VDDQ_P0_ABCD</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>12</sortorder>
+                    <color>5A2B57</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_VDDQ_P0_EFGH</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>13</sortorder>
+                    <color>89ABF8</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_VDDQ_P1_IJKL</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>14</sortorder>
+                    <color>7EC25C</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_VDDQ_P1_MNOP</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>15</sortorder>
+                    <color>274482</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>P_VNN_PCH_AUX</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>16</sortorder>
+                    <color>2B5429</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_VDDQ_G0_VO</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>17</sortorder>
+                    <color>8048B4</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_VDDQ_G1_VO</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>18</sortorder>
+                    <color>FD5434</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_VDDQ_G2_VO</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>19</sortorder>
+                    <color>790E1F</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_VDDQ_G3_VO</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>20</sortorder>
+                    <color>87AC4D</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_VPP_G1_VO</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>21</sortorder>
+                    <color>E89DF4</color>
+                    <item>
+                        <host>GIGABYTE MegaRAC SP-X R182-N20-00</host>
+                        <key>VR_VPP_G3_VO</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+    <value_maps>
+        <value_map>
+            <name>IPMI Event Logging Disabled</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>OK</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>Correctable Memory Error Logging Disabled</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>Event ‘Type’ Logging Disabled</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4</value>
+                    <newvalue>Log Area Reset/Cleared</newvalue>
+                </mapping>
+                <mapping>
+                    <value>8</value>
+                    <newvalue>All Event Logging Disabled</newvalue>
+                </mapping>
+                <mapping>
+                    <value>16</value>
+                    <newvalue>SEL Full</newvalue>
+                </mapping>
+                <mapping>
+                    <value>32</value>
+                    <newvalue>SEL Almost Full</newvalue>
+                </mapping>
+                <mapping>
+                    <value>64</value>
+                    <newvalue>Correctable Machine Check Error Logging Disabled</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+        <value_map>
+            <name>IPMI Power Supply</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>Power supply not installed</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>Presence detected</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>Failure detected</newvalue>
+                </mapping>
+                <mapping>
+                    <value>3</value>
+                    <newvalue>Presence detected, Failure detected</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4</value>
+                    <newvalue>Predictive Failure</newvalue>
+                </mapping>
+                <mapping>
+                    <value>8</value>
+                    <newvalue>Input lost (AC/DC)</newvalue>
+                </mapping>
+                <mapping>
+                    <value>11</value>
+                    <newvalue>Presence detected, Failure detected, Input lost (AC/DC)</newvalue>
+                </mapping>
+                <mapping>
+                    <value>16</value>
+                    <newvalue>Input lost or out-of-range</newvalue>
+                </mapping>
+                <mapping>
+                    <value>32</value>
+                    <newvalue>Input out-of-range but present</newvalue>
+                </mapping>
+                <mapping>
+                    <value>64</value>
+                    <newvalue>Configuration error</newvalue>
+                </mapping>
+                <mapping>
+                    <value>128</value>
+                    <newvalue>Inactive</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+        <value_map>
+            <name>IPMI Processor</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>OK</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>IERR</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>Thermal Trip</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4</value>
+                    <newvalue>FRB1/BIST failure</newvalue>
+                </mapping>
+                <mapping>
+                    <value>8</value>
+                    <newvalue>FRB2/Hang in POST failure</newvalue>
+                </mapping>
+                <mapping>
+                    <value>16</value>
+                    <newvalue>FRB3/Processor Startup/Initialization failure</newvalue>
+                </mapping>
+                <mapping>
+                    <value>32</value>
+                    <newvalue>Configuration Error</newvalue>
+                </mapping>
+                <mapping>
+                    <value>64</value>
+                    <newvalue>SM BIOS Uncorrectable CPU-complex Error</newvalue>
+                </mapping>
+                <mapping>
+                    <value>128</value>
+                    <newvalue>Processor Presence detected</newvalue>
+                </mapping>
+                <mapping>
+                    <value>256</value>
+                    <newvalue>Processor disabled</newvalue>
+                </mapping>
+                <mapping>
+                    <value>512</value>
+                    <newvalue>Terminator Presence Detected</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1024</value>
+                    <newvalue>Processor Automatically Throttled</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2048</value>
+                    <newvalue>Machine Check Exception Uncorrectable</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4096</value>
+                    <newvalue>Correctable Machine Check Error</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+        <value_map>
+            <name>IPMI Watchdog 2</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>OK</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>Timer expired, status only</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>Hard Reset</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4</value>
+                    <newvalue>Power Down</newvalue>
+                </mapping>
+                <mapping>
+                    <value>8</value>
+                    <newvalue>Power Cycle</newvalue>
+                </mapping>
+                <mapping>
+                    <value>256</value>
+                    <newvalue>Timer interrupt</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
+</zabbix_export>
