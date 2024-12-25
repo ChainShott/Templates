@@ -1,0 +1,61 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-12-25T01:58:23Z'
+  groups:
+    -
+      uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    -
+      uuid: fe6bf6155bb74fcebb475ef857c54bb3
+      template: 'POLYUS Exchange Managed Availability Template'
+      name: 'POLYUS Exchange Managed Availability Template'
+      groups:
+        -
+          name: Templates
+      discovery_rules:
+        -
+          uuid: f58843fb475240fb860624a44a95997b
+          name: 'HealthSet Names'
+          key: ExcMonitor
+          delay: 2h
+          filter:
+            evaltype: AND
+            conditions:
+              -
+                macro: '{#HEALTHSETNAME}'
+                value: '{$HEALTHSETNAMEMATCH}'
+                formulaid: A
+              -
+                macro: '{#HEALTHSETNAME}'
+                value: '{$HEALTHSETNAMENOTMATCH}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: B
+          lifetime: 7d
+          item_prototypes:
+            -
+              uuid: 23be84d7123e4a7d9901b1812a39ee3d
+              name: 'Exchange Health Set  - {#HEALTHSETNAME}'
+              type: ZABBIX_ACTIVE
+              key: 'HealthSetCheck[{#HEALTHSETNAME}]'
+              delay: 5m
+              trigger_prototypes:
+                -
+                  uuid: c63dd7bf893c40f4831ac310edfb6754
+                  expression: 'last(/POLYUS Exchange Managed Availability Template/HealthSetCheck[{#HEALTHSETNAME}])>1'
+                  name: 'Exchange Health Set {#HEALTHSETNAME} Error'
+                  priority: HIGH
+                  description: |
+                    Для дальнейшего анализа проблемы необходимо выполнить следующий cmdlet на сервере с Powershell Exchange Module:
+                    Get-ServerHealth -Identity '{HOST.HOST}' -HealthSet '{#HEALTHSETNAME}'
+                    
+                    Description: Knowledge: 
+                    http://technet.microsoft.com/en-us/library/ms.exch.scom.{#HEALTHSETNAME}(EXCHG.150).aspx
+                  manual_close: 'YES'
+      macros:
+        -
+          macro: '{$HEALTHSETNAMEMATCH}'
+          value: '.*'
+        -
+          macro: '{$HEALTHSETNAMENOTMATCH}'
+          value: ^Compliance$

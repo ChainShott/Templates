@@ -1,0 +1,250 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-12-25T01:58:00Z'
+  groups:
+    -
+      uuid: 4113a76935a4450c8183e5261dae51ea
+      name: Templates/POLYUS/Windows
+  templates:
+    -
+      uuid: e61d596fd5b843bb830e39d5e036a7a7
+      template: 'POLYUS Exchange Extended Monitoring Template'
+      name: 'POLYUS Exchange Extended Monitoring Template'
+      groups:
+        -
+          name: Templates/POLYUS/Windows
+      items:
+        -
+          uuid: 0dc6373c16a541d88887c8c057584db9
+          name: 'KSE AntiVirus Bases State'
+          key: get.av.bases.state
+          delay: 5m
+          history: 30d
+          trends: 90d
+          tags:
+            -
+              tag: service
+              value: kse
+          triggers:
+            -
+              uuid: e8cb985df08a40f29c1a92e9463fa306
+              expression: 'max(/POLYUS Exchange Extended Monitoring Template/get.av.bases.state,1h)<>1'
+              name: 'KSE Antivirus Bases not Updated'
+              priority: WARNING
+              description: 'Не обновлены антивирусные базы'
+              tags:
+                -
+                  tag: service
+                  value: kse
+        -
+          uuid: 25c42d8d66f849e18bc610b2c8c83f52
+          name: 'Get ExchDB Size - Raw'
+          key: get.edb.size.raw
+          delay: 5m
+          history: 1d
+          trends: '0'
+          value_type: TEXT
+          tags:
+            -
+              tag: service
+              value: edb
+        -
+          uuid: 034eb92c7fdc480786785e012fcd7a1f
+          name: 'Get MailboxDatabase Backup State'
+          key: 'get.mb.db.backup[{$BACKUP.DAY.FULL},{$BACKUP.EXCLUDED.DBS}]'
+          delay: 5m
+          trends: '0'
+          value_type: TEXT
+          tags:
+            -
+              tag: service
+              value: mbdbbackup
+          triggers:
+            -
+              uuid: d80ceca900504493a5772c6af1961e82
+              expression: 'last(/POLYUS Exchange Extended Monitoring Template/get.mb.db.backup[{$BACKUP.DAY.FULL},{$BACKUP.EXCLUDED.DBS}])<>"All Databases have Full backup"'
+              name: 'Full backup status for databases is Error'
+              description: '{ITEM.LASTVALUE1}'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: service
+                  value: mbdbbackup
+        -
+          uuid: d767f018fa1245418cddfed9a05c6ae4
+          name: 'Get Mount Point - Raw'
+          key: get.mount.point.raw
+          delay: 5m
+          history: 1d
+          trends: '0'
+          value_type: TEXT
+          tags:
+            -
+              tag: service
+              value: mountpoint
+      discovery_rules:
+        -
+          uuid: 1747a1e4ede04ca09c8093f351042a13
+          name: 'ExchDBs Discovery'
+          type: DEPENDENT
+          key: edb.discovery
+          delay: '0'
+          item_prototypes:
+            -
+              uuid: ef2d80fb3539441ab5b039aa07e4c43e
+              name: '{#EDBNAME} - Size'
+              type: DEPENDENT
+              key: 'edb.size.[{#EDBNAME}]'
+              delay: '0'
+              history: 30d
+              trends: 90d
+              units: B
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.EDBname == "{#EDBNAME}")].EDBsize.first()'
+              master_item:
+                key: get.edb.size.raw
+              tags:
+                -
+                  tag: service
+                  value: edb
+          master_item:
+            key: get.edb.size.raw
+          lld_macro_paths:
+            -
+              lld_macro: '{#EDBNAME}'
+              path: $.EDBname
+        -
+          uuid: b3751e8a19ac4c0389609b40de9b1359
+          name: 'Mount Point Discovery'
+          type: DEPENDENT
+          key: mount.point.discovery
+          delay: '0'
+          item_prototypes:
+            -
+              uuid: 33ffe4b9a4984c5bb6d150f4e6626c0e
+              name: '{#LABEL} ({#NAME}) - Capacity'
+              type: DEPENDENT
+              key: 'mount.point.capacity.[{#LABEL}]'
+              delay: '0'
+              history: 30d
+              trends: 90d
+              value_type: FLOAT
+              units: B
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.Label == "{#LABEL}")].Capacity.first()'
+              master_item:
+                key: get.mount.point.raw
+              tags:
+                -
+                  tag: service
+                  value: mountpoint
+            -
+              uuid: 00a35ad08f6f4636add234c735fa1c99
+              name: '{#LABEL} ({#NAME}) - Free Space Percent'
+              type: DEPENDENT
+              key: 'mount.point.free.space.percent.[{#LABEL}]'
+              delay: '0'
+              history: 30d
+              trends: 90d
+              value_type: FLOAT
+              units: '%'
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.Label == "{#LABEL}")].FreeSpacePercent.first()'
+              master_item:
+                key: get.mount.point.raw
+              tags:
+                -
+                  tag: service
+                  value: mountpoint
+              trigger_prototypes:
+                -
+                  uuid: 6f976614349d412e9a3a15f730381caa
+                  expression: 'last(/POLYUS Exchange Extended Monitoring Template/mount.point.free.space.percent.[{#LABEL}])<{$MOUNT.POINT.PERCENT.THRESHOLD}'
+                  name: 'Mount Point {#LABEL} Free Space in Percent is low'
+                  event_name: 'Mount Point {#LABEL} Free Space in Percent is low less than {$MOUNT.POINT.PERCENT.THRESHOLD}%'
+                  opdata: 'Free: {ITEM.LASTVALUE1} < {$MOUNT.POINT.PERCENT.THRESHOLD} %'
+                  priority: AVERAGE
+                  manual_close: 'YES'
+                  tags:
+                    -
+                      tag: MountPoint
+                      value: '{#LABEL}'
+                    -
+                      tag: service
+                      value: mountpoint
+            -
+              uuid: 3f13cec05fe145959501c39a6bb0cbd6
+              name: '{#LABEL} ({#NAME}) - Free Space'
+              type: DEPENDENT
+              key: 'mount.point.free.space.[{#LABEL}]'
+              delay: '0'
+              history: 30d
+              trends: 90d
+              value_type: FLOAT
+              units: B
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.Label == "{#LABEL}")].FreeSpace.first()'
+              master_item:
+                key: get.mount.point.raw
+              tags:
+                -
+                  tag: service
+                  value: mountpoint
+              trigger_prototypes:
+                -
+                  uuid: 161353bda5ad410f83eabdfa0f78e277
+                  expression: 'last(/POLYUS Exchange Extended Monitoring Template/mount.point.free.space.[{#LABEL}])<{$MOUNT.POINT.MB.THRESHOLD}'
+                  name: 'Mount Point {#LABEL} Free Space in MBytes is low'
+                  event_name: 'Mount Point {#LABEL} Free Space in MBytes is low less than {$MOUNT.POINT.MB.THRESHOLD}B'
+                  opdata: 'Free: {ITEM.LASTVALUE1} < {$MOUNT.POINT.MB.THRESHOLD}'
+                  priority: AVERAGE
+                  manual_close: 'YES'
+                  tags:
+                    -
+                      tag: lable
+                      value: '{#LABEL}'
+                    -
+                      tag: service
+                      value: mountpoint
+          master_item:
+            key: get.mount.point.raw
+          lld_macro_paths:
+            -
+              lld_macro: '{#LABEL}'
+              path: $.Label
+            -
+              lld_macro: '{#NAME}'
+              path: $.Name
+      tags:
+        -
+          tag: service
+          value: mountpoint
+      macros:
+        -
+          macro: '{$BACKUP.DAY.FULL}'
+          value: '31'
+          description: 'Для триггера последний бэкап должен быть старше этого значения'
+        -
+          macro: '{$BACKUP.EXCLUDED.DBS}'
+          value: NotExistingDB
+          description: 'Исключить проверку DB. Указать имена DB через запятую'
+        -
+          macro: '{$MOUNT.POINT.MB.THRESHOLD}'
+          value: 200G
+          description: Free
+        -
+          macro: '{$MOUNT.POINT.PERCENT.THRESHOLD}'
+          value: '15'
+          description: Free

@@ -1,0 +1,102 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-12-25T01:59:47Z'
+  groups:
+    -
+      uuid: 437994976f454c02b9f817dc5e977e2c
+      name: Templates/POLYUS
+  templates:
+    -
+      uuid: 56b525d857e94a66b41fcdd5adf849e9
+      template: 'POLYUS Template Exchange MailFlow Check'
+      name: 'POLYUS Template Exchange MailFlow Check'
+      groups:
+        -
+          name: Templates/POLYUS
+      items:
+        -
+          uuid: 22439d2af8714b3a92f8dc099d5a1653
+          name: 'Test MailFlow Latency'
+          type: DEPENDENT
+          key: test.mailflow.latency
+          delay: '0'
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.MessageLatencyTime
+          master_item:
+            key: testmailflow
+          tags:
+            -
+              tag: component
+              value: Mailflow
+        -
+          uuid: 126e38fa464647019b588c235633bf92
+          name: 'Test MailFlow Result'
+          type: DEPENDENT
+          key: test.mailflow.result
+          delay: '0'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.TestMailflowResult
+          master_item:
+            key: testmailflow
+          tags:
+            -
+              tag: component
+              value: Mailflow
+          triggers:
+            -
+              uuid: ae460e75614c4ad2a788dbede84f5832
+              expression: 'min(/POLYUS Template Exchange MailFlow Check/test.mailflow.result,25m)<1'
+              name: 'MailFlow Test Failed'
+              priority: AVERAGE
+              tags:
+                -
+                  tag: trigger_tag
+                  value: '{HOST.HOST} MailFlow Test'
+        -
+          uuid: d85fc30ff50544dda239f0392039b437
+          name: 'Test MailFlow TargetMailboxServer'
+          type: DEPENDENT
+          key: test.mailflow.targetmailboxserver
+          delay: '0'
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.TargetMailboxServer
+          master_item:
+            key: testmailflow
+          tags:
+            -
+              tag: component
+              value: Mailflow
+        -
+          uuid: 2c31c310bb82461e8a8602bd2bae5d69
+          name: 'Test MailFlow'
+          key: testmailflow
+          delay: 5m
+          history: 1d
+          trends: '0'
+          value_type: TEXT
+          tags:
+            -
+              tag: Application
+              value: RAW-Item
+          triggers:
+            -
+              uuid: f6aec78b271140ec8c8b0f925a196be6
+              expression: 'nodata(/POLYUS Template Exchange MailFlow Check/testmailflow,3h)=1'
+              name: 'MailFlow Test NoData'
+              priority: AVERAGE
+              tags:
+                -
+                  tag: trigger_tag
+                  value: '{HOST.HOST} MailFlow Test'
