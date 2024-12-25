@@ -1,0 +1,86 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-12-25T01:50:16Z'
+  groups:
+    -
+      uuid: 437994976f454c02b9f817dc5e977e2c
+      name: Templates/POLYUS
+  templates:
+    -
+      uuid: 48c47ad5efa3438caf155534c559f894
+      template: 'POLYUS PS windows Processes - CPU usage'
+      name: 'POLYUS PS windows Processes - CPU usage'
+      description: |
+        Обнаруживает получает % использования ЦПУ процессами.
+        Использует powershell. Нужно прописать пользовательский параметр в агенте:
+        UserParameter=get-processes-cpuutil,powershell -NoProfile -ExecutionPolicy Bypass -Command "$CpuCores = (Get-WMIObject Win32_ComputerSystem).NumberOfLogicalProcessors; Get-Counter '\Process(*)\% Processor Time','\Процесс(*)\% загруженности процессора' -SampleInterval 2 -ErrorAction SilentlyContinue | select -ExpandProperty CounterSamples | where {$_.Status -eq 0 -and $_.instancename -notin '_total', 'idle'} | Group-Object -Property InstanceName | Select @{N='InstanceName';E={$_.Name}} , @{Name='CPUPercent';Expression={[Decimal]::Round(((($_.Group|Measure-Object CookedValue -Sum).Sum) / $CpuCores), 2)}} | sort CPUPercent -Descending | ConvertTo-Json -Compress"
+      groups:
+        -
+          name: Templates/POLYUS
+      items:
+        -
+          uuid: cd8b5c853db848798b74f626b5f6b435
+          name: 'Processes CPU RAW list'
+          key: get-processes-cpuutil
+          history: '0'
+          trends: '0'
+          value_type: TEXT
+          tags:
+            -
+              tag: Application
+              value: RAW-Item
+      discovery_rules:
+        -
+          uuid: 35c674004f994c4cb2a7e6fba20d624b
+          name: 'Processes CPU Utill discovery'
+          type: DEPENDENT
+          key: discovery.processes.cpu
+          delay: '0'
+          filter:
+            evaltype: AND
+            conditions:
+              -
+                macro: '{#PROCESS_NAME}'
+                value: '{$WIN.PROCESSES.CPU.MATCHES}'
+                formulaid: A
+              -
+                macro: '{#PROCESS_NAME}'
+                value: '{$WIN.PROCESSES.CPU.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: B
+          lifetime: 3d
+          item_prototypes:
+            -
+              uuid: 15e620fc8aec44e8a62a01502c048a57
+              name: 'Process {#PROCESS_NAME} CPU Utilization'
+              type: DEPENDENT
+              key: 'Process.cpu["{#PROCESS_NAME}"]'
+              delay: '0'
+              history: 30d
+              value_type: FLOAT
+              units: '%'
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$[?(@.InstanceName==''{#PROCESS_NAME}'')].CPUPercent.first()'
+                  error_handler: DISCARD_VALUE
+              master_item:
+                key: get-processes-cpuutil
+              tags:
+                -
+                  tag: Application
+                  value: 'Processes CPU Utilization'
+          master_item:
+            key: get-processes-cpuutil
+          lld_macro_paths:
+            -
+              lld_macro: '{#PROCESS_NAME}'
+              path: $.InstanceName
+      macros:
+        -
+          macro: '{$WIN.PROCESSES.CPU.MATCHES}'
+          value: '.*'
+        -
+          macro: '{$WIN.PROCESSES.CPU.NOT_MATCHES}'
+          value: CHANGE_THIS_IF_NEED

@@ -1,0 +1,81 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-12-25T01:50:05Z'
+  groups:
+    -
+      uuid: 437994976f454c02b9f817dc5e977e2c
+      name: Templates/POLYUS
+  templates:
+    -
+      uuid: 71d5d3489d824c268b1f1c67bd650e81
+      template: 'POLYUS PS windows Processes - Memory'
+      name: 'POLYUS PS windows Processes - Memory'
+      groups:
+        -
+          name: Templates/POLYUS
+      items:
+        -
+          uuid: 8aaa69640cc744fdba6daa100e68f124
+          name: 'Processes WS RAW list'
+          key: get-processes-ws-list
+          history: '0'
+          trends: '0'
+          value_type: TEXT
+          description: 'Берем список процессов и их WorkingSet Memory'
+          tags:
+            -
+              tag: Application
+              value: RAW-Item
+      discovery_rules:
+        -
+          uuid: 2fda987ee4f749399c32b557d638af36
+          name: 'Processes ws discovery'
+          type: DEPENDENT
+          key: discovery.processes.ws
+          delay: '0'
+          filter:
+            evaltype: AND
+            conditions:
+              -
+                macro: '{#PROCESS_NAME}'
+                value: '{$WIN.PROCESSES.MEM.MATCHES}'
+                formulaid: A
+              -
+                macro: '{#PROCESS_NAME}'
+                value: '{$WIN.PROCESSES.MEM.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: B
+          lifetime: 3d
+          item_prototypes:
+            -
+              uuid: 48ed022775e441ef9b77bee34159b67c
+              name: 'Process {#PROCESS_NAME} Memory'
+              type: DEPENDENT
+              key: 'Process.ws["{#PROCESS_NAME}"]'
+              delay: '0'
+              units: B
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$[?(@.Name==''{#PROCESS_NAME}'')].WS.first()'
+                  error_handler: DISCARD_VALUE
+              master_item:
+                key: get-processes-ws-list
+              tags:
+                -
+                  tag: Application
+                  value: 'Processes Memory'
+          master_item:
+            key: get-processes-ws-list
+          lld_macro_paths:
+            -
+              lld_macro: '{#PROCESS_NAME}'
+              path: $.Name
+      macros:
+        -
+          macro: '{$WIN.PROCESSES.MEM.MATCHES}'
+          value: '.*'
+        -
+          macro: '{$WIN.PROCESSES.MEM.NOT_MATCHES}'
+          value: CHANGE_THIS_IF_NEED

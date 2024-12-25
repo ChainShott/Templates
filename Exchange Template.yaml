@@ -1,0 +1,38 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-12-25T01:50:29Z'
+  groups:
+    -
+      uuid: 3d74bac08f304beda49bd71a07e7c843
+      name: Templates/POLYUS/Overrides
+  templates:
+    -
+      uuid: 94d960293fda4806b56a2edaa3c8b4e0
+      template: 'POLYUS Template OS Windows by Zabbix agent - Exchange Overrides 2'
+      name: 'POLYUS Template OS Windows by Zabbix agent - Exchange Overrides 2'
+      templates:
+        -
+          name: 'POLYUS Exchange Extended Monitoring Template'
+        -
+          name: 'POLYUS Exchange Managed Availability Template'
+        -
+          name: 'POLYUS Template Exchange MailFlow Check'
+        -
+          name: 'POLYUS Template Exchange WEB protocol healthcheck'
+        -
+          name: 'POLYUS Template OS Windows by Zabbix agent'
+      groups:
+        -
+          name: Templates/POLYUS/Overrides
+      macros:
+        -
+          macro: '{$SERVICE.NAME.MATCHES}'
+          value: '^(?:RemoteRegistry|MSExchange.*|FMS|HostControllerService|IISADMIN|SearchExchangeTracing|W3SVC|WinRM|wsbexchange|nxlog)$'
+          description: 'This macro is used in Service discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$SERVICE.NAME.NOT_MATCHES}'
+          value: '^(?:MMCSS|gupdate|SysmonLog|clr_optimization_v.+|clr_optimization_v.+|sppsvc|gpsvc|Pml Driver HPZ12|Net Driver HPZ12|MapsBroker|IntelAudioService|Intel\(R\) TPM Provisioning Service|dbupdate|DoSvc)$'
+          description: 'This macro is used in Service discovery. Can be overridden on the host or linked template level.'
+        -
+          macro: '{$VFS.FS.FREE.MIN.CRIT:"D:"}'
+          value: '0'
